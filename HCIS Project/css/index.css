@@ -61,7 +61,7 @@ banner
     border-radius: 0px;
 }
 .navbar-default {
-    background-color: #fff;
+    background-color: #8B93FF;
     padding: 20px 0;
     transition: all 0.3s;
 }
@@ -96,7 +96,7 @@ banner
 
 .top-nav-collapse {
     padding: 0;
-    background: rgba(28,74,90, 0.9);
+    background: rgba(90, 28, 28, 0.9);
 }
 
 .white, .white:hover, .white:focus
@@ -140,7 +140,7 @@ banner
 	position: relative;
 }
 .bg-color{
-	background-color: RGBA(13, 70, 83, 0.78);
+	background-color: #FFF7FC;
 	min-height: 650px;
 }
 .banner-info{
@@ -162,7 +162,7 @@ banner
 	margin-top: 30px;
 	padding: 10px 20px;
 	font-size: 12px;
-	background-color: rgba(12, 184, 182, 0.91);
+	background-color: #5755FE;
 	border-radius: 3px;
 	color: #fff;
 }
@@ -428,7 +428,7 @@ contact us
 footer
 ***************************************/
 #footer{
-	background-color: #325C6A;
+	background-color: #8B93FF;
 }
 .ftr-tle {
     height: 50px;

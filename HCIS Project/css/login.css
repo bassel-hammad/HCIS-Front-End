@@ -125,7 +125,7 @@ a.brand-logo {
 
 .btn {
     align-items: center;
-    background:rgba(12, 184, 182, 0.21);
+    background:#8B93FF;
     border-radius: 6px;
     border: 0;
     color: #fff;
@@ -138,7 +138,7 @@ a.brand-logo {
 }
 
 .btn:hover {
-    background: rgba(12, 184, 182) !important;
+    background: #FF71CD !important;
     transform: translateY(-2px);
 }
 
@@ -162,14 +162,14 @@ a.brand-logo {
 
 .register .fas,
 .login .fas {
-    color: rgba(12, 184, 182, 0.21);
+    color: #8B93FF;
     font-size: 30px;
     margin-bottom: 5px;
 }
 
 .register strong,
 .login strong {
-    color: #3b3663;
+    color: #8B93FF;
     display: block;
     font-size: 28px;
 }
@@ -232,7 +232,7 @@ a.brand-logo {
 
 .register .form .form-row.bottom .forgot,
 .login .form .form-row.bottom .forgot {
-    color: rgba(12, 184, 182) !important;
+    color: #FF71CD !important;
     font-size: 18px;
     opacity: .7;
 }
@@ -289,8 +289,8 @@ a.brand-logo {
 
 .register .form .form-row .form-check input[type="checkbox"]:checked+label:before,
 .login .form .form-row .form-check input[type="checkbox"]:checked+label:before {
-    background-color: rgba(12, 184, 182) !important;
-    border-color: rgba(12, 184, 182) !important;
+    background-color: #FF71CD !important;
+    border-color: #FF71CD !important;
     color: #fff;
 }
 
@@ -430,10 +430,7 @@ a.brand-logo {
     pointer-events: none; /* Ensure arrow does not interfere with clicking the select */
 }
 
-/* Hover effect for select element */
-.form-select:hover, .form-select:focus {
-    border-color: #2980b9;
-}
+
 
 /* Focus effect for the arrow icon */
 .form-select:focus::after {
@@ -462,7 +459,7 @@ a.brand-logo {
     top: 50%;
     right: 10px;
     transform: translateY(-50%);
-    color: #3498db; /* Adjust the color as needed */
+    color: #8B93FF; /* Adjust the color as needed */
 }
 
 /* Style for form labels */
@@ -491,7 +488,7 @@ a.brand-logo {
     width: calc(100% - 30px); /* Adjust the width to accommodate the icon */
     padding: 10px;
     padding-right: 30px; /* Space for the icon */
-    border: 1px solid #3498db;
+    border: 1px solid #5755FE;
     border-radius: 5px;
     background-color: #fff;
     color: #333;
@@ -525,7 +522,7 @@ a.brand-logo {
 
 /* Styling for the login button */
 .btn-login {
-    background-color: #3498db;
+    background-color: #8B93FF;
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -534,8 +531,4 @@ a.brand-logo {
     font-size: 16px;
 }
 
-/* Hover effect for the login button */
-.btn-login:hover {
-    background-color: #2980b9;
-}
 
