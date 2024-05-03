@@ -9,6 +9,7 @@
   <meta name="keywords" >
 
   <link rel="stylesheet" href="../css/index.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="../css/login.css" type="text/css" media="all" />
   <link rel="stylesheet" type="text/css" href="../css/Doctor.css" type="text/css" media="all"/>
   <link rel="stylesheet" type="text/css" href="../css/bootstrap.min.css" type="text/css" media="all"/>
   <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css" type="text/css" media="all"/>
@@ -35,19 +36,36 @@
           <div class="container">
             <div class="col-md-12">
               <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <button
+                  type="button"
+                  class="navbar-toggle"
+                  data-toggle="collapse"
+                  data-target="#myNavbar"
+                >
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#"><img src="{{ url_for('static', filename='image/logo.png') }}" class="img-responsive" style="width: 140px; margin-top: -50px;"></a>
+                <a class="navbar-brand" href="#">
+                  <!-- <img src="{{ url_for('static', filename='image/logo.png') }}" class="img-responsive" style="width: 140px; margin-top: -16px"/> -->
+                  <img src="../images/Logo.png" class="img-responsive" style="width: 140px; margin-top: -16px" alt="logo" />
+                </a>
               </div>
               <div class="collapse navbar-collapse navbar-right" id="myNavbar">
                 <ul class="nav navbar-nav">
-                  <li class=""><a href="{{ url_for('views.index') }}">Home</a></li>
-                  <li class="active"><a href="#appointments">View Appointments</a></li>
-                  <li class=""><a href="#Calendar">Calendar</a></li>
-                  <li class=""><a href="{{ url_for('views.login') }}">Logout </a></li>
+                  <li class="">
+                    <a href="{{ url_for('views.index') }}">Home</a>
+                  </li>
+                  <li class="">
+                    <a href="{{ url_for('views.index') }}">Services</a>
+                  </li>
+                  <li class="">
+                    <a href="{{ url_for('views.index') }}">Doctors</a>
+                  </li>
+                  <li class="">
+                    <a href="{{ url_for('views.index') }}">Testimonial</a>
+                  </li>
+                  <li class="active"><a href="#">Login</a></li>
                 </ul>
               </div>
             </div>
@@ -107,7 +125,7 @@
           <table class="table">
             <thead>
               <tr>
-                <th>Scan Price</th>
+                
                 <th>Upload Scan Image</th>
                 <th>Action</th>
               </tr>
@@ -116,16 +134,11 @@
               {% for scan in scans2 %}
                 <tr>
                   <td>
-                <label for="price">Scan Price:</label>
-                <input type="number" id="price" name="price" min="0" value="0" required />
-
-                  </td>
-                  <td>
                     <input type="file" name="report" />
                     <input type="hidden" name="scan_id" value="{{ scan[0] }}" /> <!-- Add this line -->
                   </td>
                   <td>
-                    <button type="submit">Submit</button>
+                    <button class= "btn" type="submit">Submit</button>
                   </td>
                 </tr>
               {% endfor %}
@@ -148,7 +161,6 @@
                     <th scope="col">Time</th>
                     <th scope="col">Scan Machine</th>
                     <th scope="col">Scan Category</th>
-                    <th scope="col">Scan Price</th>
                     <th scope="col">Scan Image</th>
                     <th scope="col">Patient Info</th>
                   </tr>
@@ -161,7 +173,6 @@
                     <td>{{ scan[9] }}</td>
                     <td>{{ scan[3] }}</td>
                     <td>{{ scan[4] }}</td>
-                    <td>{{ scan[2] }}$</td>
                     <td>
                       <a
                         href="{{ url_for('views.scan_detail', scan_id=scan[0]) }}"
