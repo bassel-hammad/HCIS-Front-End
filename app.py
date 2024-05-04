@@ -78,7 +78,7 @@ def login():
                     session['username']=username
                     session['userType']=userType
                     if userType=="Admins_accounts":
-                        return redirect("/admin_page")
+                        return redirect("/admin")
                     elif userType=="Patients":
                         return "HEllO IN PATIENT PAGE"
                     elif userType=="Radiologist":
