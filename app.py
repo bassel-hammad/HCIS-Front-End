@@ -88,9 +88,10 @@ def login():
                       
     print(Message)
     return render_template('login.html',message=Message)
-@app.route('/admin_page')
-def admin_page():
+@app.route('/admin')
+def admin():
     """Admin page"""
+    print("hello")
     if(session['userType']=="Admins_accounts"):
         return render_template("admin2.html")
     else:

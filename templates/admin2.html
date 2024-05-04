@@ -90,16 +90,16 @@
               <div class="collapse navbar-collapse navbar-right" id="myNavbar">
                 <ul class="nav navbar-nav">
                   <li class="">
-                    <a href="{{ url_for('views.index') }}">Home</a>
+                    <a href="{{ url_for('index') }}">Home</a>
                   </li>
                   <li class="">
-                    <a href="{{ url_for('views.index') }}">Services</a>
+                    <a href="{{ url_for('index') }}">Services</a>
                   </li>
                   <li class="">
-                    <a href="{{ url_for('views.index') }}">Doctors</a>
+                    <a href="{{ url_for('index') }}">Doctors</a>
                   </li>
                   <li class="">
-                    <a href="{{ url_for('views.index') }}">Testimonial</a>
+                    <a href="{{ url_for('index') }}">Testimonial</a>
                   </li>
                   <li class="active"><a href="#">Login</a></li>
                 </ul>
@@ -121,7 +121,7 @@
             <form
               class="register-form"
               method="POST"
-              action="{{ url_for('views.admin') }}"
+              action="{{ url_for('admin') }}"
             >
               <fieldset>
                 <div class="form">
@@ -202,7 +202,7 @@
                 <form
                   class="register-form"
                   method="POST"
-                  action="{{ url_for('views.admin') }}"
+                  action="{{ url_for('admin') }}"
                 >
                   <fieldset>
                     <div class="form">
@@ -291,14 +291,14 @@
                         <td>{{ d.full_name }}</td>
                         <td>
                           <a
-                            href="{{ url_for('views.edit_doctor', doctor_id=d[0]) }}"
+                            href="{{ url_for('edit_doctor', doctor_id=d[0]) }}"
                             >Edit</a
                           >
                         </td>
                         <td>
                           <form
                             method="post"
-                            action="{{ url_for('views.delete_doctor_route', doctor_id=d.id) }}"
+                            action="{{ url_for('delete_doctor_route', doctor_id=d.id) }}"
                           >
                             <button type="submit" class="btn btn-remove">
                               Remove
@@ -333,14 +333,14 @@
                         <td>{{ d.full_name }}</td>
                         <td>
                           <a
-                            href="{{ url_for('views.edit_doctor', doctor_id=d[0]) }}"
+                            href="{{ url_for('edit_doctor', doctor_id=d[0]) }}"
                             >Edit</a
                           >
                         </td>
                         <td>
                           <form
                             method="post"
-                            action="{{ url_for('views.delete_doctor_route', doctor_id=d.id) }}"
+                            action="{{ url_for('delete_doctor_route', doctor_id=d.id) }}"
                           >
                             <button type="submit" class="btn btn-remove">
                               Remove

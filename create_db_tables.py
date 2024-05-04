@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS PatientCost (
     Date DATE,
     CONSTRAINT fk_patient_cost FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
 );
+INSERT INTO Admins_accounts(UserName,Password) VALUES('admin1','1234');
 '''
 # Defining database connection parameters
 # Please replace the values with your own credentials.
