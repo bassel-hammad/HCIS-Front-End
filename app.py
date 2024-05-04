@@ -38,4 +38,36 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     message=''
-    return render_template('sign_in.html', msg=message)
+    if request.method == 'POST':
+        check_create = 'create' in request.form
+        check_sign = 'sign' in request.form
+        if check_create:
+            username = request.form['username1']
+            print(username)
+            ssn=request.form['ssn']
+            print(ssn)
+            name=request.form['fullname']
+            print(name)
+            email=request.form['email']
+            print(email)
+            password=request.form['password1']
+            print(password)
+            birthdate_str=request.form['birthdate']
+            print(birthdate_str)
+            # Convert date string to datetime object
+            birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d')
+            print(birthdate)
+            if username:
+                query_check_username_uniqueness ="SELECT UserName FROM Patients WHERE UserName=%s"
+                cursor.execute(query_check_username_uniqueness, (username,))
+                if cursor.fetchone():
+                    message = 'Change the username because it is already used'
+                else:
+                    query_insert_patient='''
+                    INSERT INTO Patients(FullName,SSN,DateOfBirth,email,UserName,Password) VALUES(%s,%s,%s,%s,%s,%s)
+                                                                                                                    '''
+                    cursor.execute(query_insert_patient,(name,ssn,birthdate,email,username,password))
+                    connection.commit()
+                    message="Account successfully created"
+    
+    return render_template('login.html')

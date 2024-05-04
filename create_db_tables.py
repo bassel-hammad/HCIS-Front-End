@@ -9,14 +9,11 @@ creation_query='''CREATE TABLE  IF NOT EXISTS Admins_accounts (
 
 CREATE TABLE IF NOT EXISTS Patients (
     PatientID SERIAL PRIMARY KEY,
-    FirstName VARCHAR NOT NULL,
-    LastName VARCHAR NOT NULL,
-    Gender VARCHAR NOT NULL,
+    FullName VARCHAR(100) NOT NULL,
+    SSN VARCHAR(30),
     DateOfBirth DATE NOT NULL,
-    City VARCHAR NOT NULL,
-    Street VARCHAR NOT NULL,
     PatientImage VARCHAR(100),
-    PhoneNumber VARCHAR(50) UNIQUE,
+    email VARCHAR(100) NOT NULL,
     UserName VARCHAR(50) UNIQUE,
     Password VARCHAR(255) NOT NULL
 );
