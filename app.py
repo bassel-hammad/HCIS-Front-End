@@ -7,6 +7,8 @@ import secrets
 import string
 
 app = Flask(__name__)
+# Set the secret key
+app.config['SECRET_KEY'] = '1234'
 
 # Defining database connection parameters
 # Please replace the values with your own credentials.
@@ -37,37 +39,59 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    message=''
+    Message=''
     if request.method == 'POST':
         check_create = 'create' in request.form
         check_sign = 'sign' in request.form
-        if check_create:
+        if (not (check_create or check_sign)  or (check_create and check_sign)):
+            Message = 'Please select Sign In or Sign Up'
+        elif check_create:
             username = request.form['username1']
-            print(username)
             ssn=request.form['ssn']
-            print(ssn)
             name=request.form['fullname']
-            print(name)
             email=request.form['email']
-            print(email)
             password=request.form['password1']
-            print(password)
             birthdate_str=request.form['birthdate']
-            print(birthdate_str)
             # Convert date string to datetime object
             birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d')
-            print(birthdate)
             if username:
                 query_check_username_uniqueness ="SELECT UserName FROM Patients WHERE UserName=%s"
                 cursor.execute(query_check_username_uniqueness, (username,))
                 if cursor.fetchone():
-                    message = 'Change the username because it is already used'
+                    Message = 'Change the username because it is already used'
                 else:
                     query_insert_patient='''
                     INSERT INTO Patients(FullName,SSN,DateOfBirth,email,UserName,Password) VALUES(%s,%s,%s,%s,%s,%s)
                                                                                                                     '''
                     cursor.execute(query_insert_patient,(name,ssn,birthdate,email,username,password))
                     connection.commit()
-                    message="Account successfully created"
-    
-    return render_template('login.html')
+                    Message="Account successfully created"
+        elif check_sign:
+            username=request.form["username2"]
+            password=request.form["password2"]
+            userType=request.form["userType"]
+            if userType == "null":
+                Message="Please select the account type"
+            elif username and password and userType:
+                cursor.execute('SELECT * FROM ' + userType+ ' WHERE UserName=%s AND Password=%s', (username, password))
+                if cursor.fetchone():
+                    session['username']=username
+                    session['userType']=userType
+                    if userType=="Admins_accounts":
+                        return redirect("/admin_page")
+                    elif userType=="Patients":
+                        return "HEllO IN PATIENT PAGE"
+                    elif userType=="Radiologist":
+                        return "HEllO IN DOCTOR PAGE"
+                else:
+                    Message="Wrong username or password"
+                      
+    print(Message)
+    return render_template('login.html',message=Message)
+@app.route('/admin_page')
+def admin_page():
+    """Admin page"""
+    if(session['userType']=="Admins_accounts"):
+        return render_template("admin2.html")
+    else:
+        return redirect("/")  #if not logged in as an Admin go to home page
