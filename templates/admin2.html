@@ -121,7 +121,8 @@
             <form
               class="register-form"
               method="POST"
-              action="{{ url_for('admin') }}"
+              action="/add_doctor"
+              enctype="multipart/form-data"
             >
               <fieldset>
                 <div class="form">
@@ -202,7 +203,8 @@
                 <form
                   class="register-form"
                   method="POST"
-                  action="{{ url_for('admin') }}"
+                  action="/admin"
+                  enctype="multipart/form-data"
                 >
                   <fieldset>
                     <div class="form">
@@ -287,18 +289,18 @@
                     <tbody>
                       {% for d in doctors %}
                       <tr>
-                        <td>{{ d.id }}</td>
-                        <td>{{ d.full_name }}</td>
+                        <td>{{ d.radiologistid }}</td>
+                        <td>{{ d.fullname }}</td>
                         <td>
                           <a
-                            href="{{ url_for('edit_doctor', doctor_id=d[0]) }}"
+                            href="{{ url_for('edit_doctor', doctor_id=d['radiologistid']) }}"
                             >Edit</a
                           >
                         </td>
                         <td>
                           <form
                             method="post"
-                            action="{{ url_for('delete_doctor_route', doctor_id=d.id) }}"
+                            action="{{ url_for('delete_doctor_route', doctor_id=d.radiologistid) }}"
                           >
                             <button type="submit" class="btn btn-remove">
                               Remove
@@ -329,18 +331,18 @@
                     <tbody>
                       {% for d in doctors %}
                       <tr>
-                        <td>{{ d.id }}</td>
-                        <td>{{ d.full_name }}</td>
+                        <td>{{ d.radiologistid }}</td>
+                        <td>{{ d.fullname }}</td>
                         <td>
                           <a
-                            href="{{ url_for('edit_doctor', doctor_id=d[0]) }}"
+                            href="{{ url_for('edit_doctor', doctor_id=d['radiologistid']) }}"
                             >Edit</a
                           >
                         </td>
                         <td>
                           <form
                             method="post"
-                            action="{{ url_for('delete_doctor_route', doctor_id=d.id) }}"
+                            action="{{ url_for('delete_doctor_route', doctor_id=d.radiologistid) }}"
                           >
                             <button type="submit" class="btn btn-remove">
                               Remove

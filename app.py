@@ -10,6 +10,10 @@ app = Flask(__name__)
 # Set the secret key
 app.config['SECRET_KEY'] = '1234'
 
+#folder for Radiologist profiles => images
+DOC_IMG_FOLDER = 'static/doctors_images/'
+app.config['UPLOAD_DOC_IMG']=DOC_IMG_FOLDER
+
 # Defining database connection parameters
 # Please replace the values with your own credentials.
 db_params = {
@@ -31,6 +35,14 @@ except (Exception, psycopg2.Error) as error:
 finally:
     if connection:
         print("Database")
+
+def find_all(table_name):
+    "Returns all rows in specified table."
+    query = f"SELECT * FROM {table_name}"
+    cursor.execute(query)
+    result=cursor.fetchall()
+    data = [dict(row) for row in result]
+    return data
 
 @app.route('/')
 def index():
@@ -88,11 +100,89 @@ def login():
                       
     print(Message)
     return render_template('login.html',message=Message)
-@app.route('/admin')
+@app.route('/admin',methods=['GET', 'POST'])
 def admin():
     """Admin page"""
-    print("hello")
     if(session['userType']=="Admins_accounts"):
+        Radiologists=find_all("Radiologist")
+        print(Radiologists[0])
+        return render_template("admin2.html",doctors=Radiologists)
+    else:
+        return redirect("/")  #if not logged in as an Admin go to home page
+    
+
+
+@app.route('/add_doctor',methods=['POST'])
+def add_doctor():
+    Message=""
+    """Admin page"""
+    if(session['userType']=="Admins_accounts"):
+        if request.method == "POST":
+            username = request.form['user_name']
+            print(username)
+            ssn=request.form['ssn']
+            print(ssn)
+            name=request.form['full_name']
+            print(name)
+            email=request.form['email']
+            print(email)
+            password=request.form['password']
+            print(password)
+            gender=request.form['Gender']
+            print(gender)
+            
+            if username:
+                query_check_username_uniqueness ="SELECT UserName FROM Radiologist WHERE UserName=%s"
+                cursor.execute(query_check_username_uniqueness, (username,))
+                if cursor.fetchone():
+                    Message = 'username is already used'
+                    
+                else:
+                    if ssn:
+                        query_check_ssn_uniqueness ="SELECT SSN FROM Radiologist WHERE SSN=%s"
+                        cursor.execute(query_check_ssn_uniqueness, (ssn,))
+                        if cursor.fetchone():
+                            Message = 'SSN is already used'
+                        else:
+                            #SSN  => ENTERED,UNIQUE   AND USERNAME => ENTERED,UNIQUE 
+                            query_insert_doctor="INSERT INTO Radiologist(FullName,SSN,email,UserName,Password,Gender) VALUES(%s,%s,%s,%s,%s,%s)"                                                                                                  
+                            cursor.execute(query_insert_doctor,(name,ssn,email,username,password,gender))
+                            connection.commit()
+                            Message="Account successfully created"
+                            #That part is for the profile picture
+                            if 'profile_image' in request.files:
+                                radiologist_image=request.files['profile_image']
+                                if radiologist_image.filename:
+                                    file_data=radiologist_image.filename.split(".")
+                                    filename=username+"."+file_data[1]
+                                    file_path=os.path.join(app.config['UPLOAD_DOC_IMG'],filename)
+                                    radiologist_image.save( os.path.join(app.config['UPLOAD_DOC_IMG'] ,filename) )
+                                    #save file path in database
+                                    update_img_query="UPDATE Radiologist SET RadiologistImage=%s where UserName=%s "
+                                    cursor.execute(update_img_query,(file_path,username))
+                                    connection.commit()
+                    else: Message="ENTER SSN"
+            else: Message="ENTER Username"
+            return render_template('admin2.html',message=Message)
+
+
+
+
+
         return render_template("admin2.html")
     else:
         return redirect("/")  #if not logged in as an Admin go to home page
+
+
+@app.route("/edit_doctor")
+def edit_doctor():
+    return "HELLO IN edit_doctor"
+
+#delete_doctor_route
+@app.route("/delete_doctor_route")
+def delete_doctor_route():
+    return "HELLO IN delete_doctor_route"
+
+
+if __name__ == "__main__":
+    app.run()

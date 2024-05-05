@@ -19,12 +19,13 @@ CREATE TABLE IF NOT EXISTS Patients (
 );
 CREATE TABLE IF NOT EXISTS Radiologist (
     RadiologistID SERIAL PRIMARY KEY,
-    FirstName VARCHAR NOT NULL,
-    LastName VARCHAR NOT NULL,
-    PhoneNumber VARCHAR(50) UNIQUE,
+    SSN VARCHAR(30),
+    FullName VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE,
     Bio TEXT,
     RadiologistImage VARCHAR(100),
     UserName VARCHAR(50) UNIQUE,
+    Gender VARCHAR(6),
     Password VARCHAR(255) NOT NULL
 );
 
