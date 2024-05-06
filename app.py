@@ -163,13 +163,8 @@ def add_doctor():
                                     connection.commit()
                     else: Message="ENTER SSN"
             else: Message="ENTER Username"
-            return render_template('admin2.html',message=Message)
-
-
-
-
-
-        return render_template("admin2.html")
+            Radiologists=find_all("Radiologist")
+            return render_template('admin2.html',message=Message,doctors=Radiologists)
     else:
         return redirect("/")  #if not logged in as an Admin go to home page
 
