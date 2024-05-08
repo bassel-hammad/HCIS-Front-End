@@ -92,7 +92,7 @@ def login():
                     if userType=="Admins_accounts":
                         return redirect("/admin")
                     elif userType=="Patients":
-                        return "HEllO IN PATIENT PAGE"
+                        return redirect("//patient")
                     elif userType=="Radiologist":
                         return "HEllO IN DOCTOR PAGE"
                 else:
@@ -212,8 +212,14 @@ def delete_doctor_route():
 
 
 
-@app.roure("/patient_profile")
-def patient_profile():
-    render_template('patient.html')
+@app.route("/patient")
+def patient():
+    return render_template('add_insurance.html')
+    return render_template('patient.html',patient=[1,2,3,4,5,6,7])
+
+
+@app.route("/add_insurance")
+def add_insurance():
+    pass
 if __name__ == "__main__":
     app.run()

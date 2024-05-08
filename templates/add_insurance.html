@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add Insurance Details</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/patient.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Add Insurance Details</h2>
+    <form action="{{ url_for('add_insurance') }}" method="post" class="insurance-form">
+      <div class="form-row">
+        <label for="insuranceCompany">Insurance Company:</label>
+        <select id="insuranceCompany" name="insuranceCompany" class="form-select" required>
+          <!-- Populate this dropdown with insurance company options -->
+          {% for company in insurance_companies %}
+          <option value="{{ company.CompanyID }}">{{ company.CompanyName }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label for="policyNumber">Policy Number:</label>
+        <input type="text" id="policyNumber" name="policyNumber" required>
+      </div>
+
+      <div class="form-row">
+        <label for="policyStartDate">Policy Start Date:</label>
+        <input type="date" id="policyStartDate" name="policyStartDate" required>
+      </div>
+
+      <div class="form-row">
+        <label for="policyEndDate">Policy End Date:</label>
+        <input type="date" id="policyEndDate" name="policyEndDate" required>
+      </div>
+
+      <div class="form-row">
+        <label for="deductibleAmount">Deductible Amount:</label>
+        <input type="number" id="deductibleAmount" name="deductibleAmount" required>
+      </div>
+
+      <div class="form-row">
+        <label for="copaymentAmount">Copayment Amount:</label>
+        <input type="number" id="copaymentAmount" name="copaymentAmount" required>
+      </div>
+
+      <div class="form-row">
+        <label for="maxCoverageAmount">Max Coverage Amount:</label>
+        <input type="number" id="maxCoverageAmount" name="maxCoverageAmount" required>
+      </div>
+
+      <div class="form-row button-submit">
+        <button class="btn btn-login">Add Insurance</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>
