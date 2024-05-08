@@ -62,58 +62,77 @@
     <h2>Edit Doctor</h2>
     <form
       method="POST"
-      action="{{ url_for('views.edit_doctor', doctor_id=doctor[0]) }}"
+      action="{{ url_for('edit_doctor') }}"
       enctype="multipart/form-data"
     >
-      <label for="full_name">Full Name:</label>
+      <label for="ID">DOCTOR ID</label>
+      <input
+        type="text"
+        id="doctor_id"
+        name="doctor_id"
+        {% if doctor %}
+          value="{{ doctor['radiologistid'] }}"
+        {% endif %}
+        readonly
+      /><br />
+      <label for="full_name">FULL NAME</label>
       <input
         type="text"
         name="full_name"
-        value="{{ doctor[5] }}"
-        required
-      /><br />
-      <label for="working_hours">Working Hours:</label>
-      <input
-        type="number"
-        name="working_hours"
-        value="{{ doctor[6] }}"
+        {% if doctor %}
+          value="{{ doctor['fullname'] }}"
+        {% endif %}
         required
       /><br />
 
-      <label for="salary">Salary:</label>
+      <label for="email">Email</label>
       <input
-        type="number"
-        name="salary"
-        value="{{ doctor[7] }}"
+        type="email"
+        id="email"
+        name="email"
+        {% if doctor %}
+          value="{{ doctor['email'] }}"
+        {% endif %}
         required
       /><br />
-      <label for="salary">Start time:</label>
-      <input
-        type="number"
-        name="start"
-        value="{{ doctor[14] }}"
-        required
-      /><br />
-      <label for="salary">End time:</label>
-      <input type="number" name="end" value="{{ doctor[15] }}" required /><br />
-
-      <label for="phone">Phone:</label>
-      <input type="text" name="phone" value="{{ doctor[8] }}" required /><br />
-
-      <label for="address">Address:</label>
+      <label for="user_name">Username</label>
       <input
         type="text"
-        name="address"
-        value="{{ doctor[9] }}"
+        id="user_name"
+        name="user_name"
+        {% if doctor %}
+          value="{{ doctor['username'] }}"
+        {% endif %}
         required
       /><br />
+      <label for="password"> Password</label>
+      <input type="password" name="password"  id="password"
+      {% if doctor %}
+          value="{{ doctor['password'] }}"
+      {% endif %} 
+      required /><br />
 
-      <label for="photo">Update Profile Picture:</label>
+      <label for="ssn">SSN</label>
+      <input type="text" name="ssn"  id="SSN" 
+      {% if doctor %}
+          value="{{ doctor['ssn'] }}"
+      {% endif %}
+      required /><br />
+
+      <label for="photo">Update Profile Picture</label>
       <input type="file" name="photo" accept="image/*" /><br />
 
+      {% if message %}
+          <h5>{{ message }}</h5>
+      {% endif %}
+
+
       <img
-        src="\static\profile_pics\{{ doctor[12] }}"
-        alt="{{ doctor[5] }}'s Photo"
+        {% if doctor %}
+          src="{{doctor['RadiologistImage']}}"
+          alt="{{ doctor['fullname'] }}'s Photo"
+        {% endif %}
+        
         style="max-width: 100px; max-height: 100px"
       />
 

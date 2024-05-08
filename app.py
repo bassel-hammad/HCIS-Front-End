@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session,flash,get_flashed_messages
+from flask import Flask, render_template, request, redirect, session,flash,get_flashed_messages,url_for
 import psycopg2
 import os
 import psycopg2.extras
@@ -169,15 +169,51 @@ def add_doctor():
         return redirect("/")  #if not logged in as an Admin go to home page
 
 
-@app.route("/edit_doctor")
+@app.route("/edit_doctor",methods=['POST','GET'])
 def edit_doctor():
-    return "HELLO IN edit_doctor"
+    if request.method=='GET':
+        # Get the value of the 'doctor_id' parameter from the URL
+        doctor_id = request.args.get('doctor_id')
+        msg=request.args.get('msg')
+        if msg is None:
+            msg=''
+        cursor.execute('SELECT * FROM  Radiologist WHERE RadiologistID=%s' , (doctor_id, ))
+        data = cursor.fetchone()
+        doctor = dict(data)
+        return render_template('edit_doctor.html',doctor=doctor,message=msg)
+    if request.method=='POST':
+        doctor_id=request.form['doctor_id']
+        username = request.form['user_name']
+        ssn=request.form['ssn']
+        name=request.form['full_name']
+        email=request.form['email']
+        password=request.form['password']
+        query_update_doctor = """
+        UPDATE Radiologist 
+        SET FullName = %s, SSN = %s, email = %s, UserName = %s, Password = %s
+        WHERE RadiologistID = %s"""
+        cursor.execute(query_update_doctor, (name, ssn, email, username, password, doctor_id))
+        connection.commit()
+        msg="The data has been updated successfully"
+        return redirect(url_for('edit_doctor', doctor_id=doctor_id, msg=msg))
+        
+   
+
 
 #delete_doctor_route
 @app.route("/delete_doctor_route")
 def delete_doctor_route():
-    return "HELLO IN delete_doctor_route"
+    # Get the value of the 'doctor_id' parameter from the URL
+    doctor_id = request.args.get('doctor_id')
+    # Delete the doctor from the database
+    cursor.execute('DELETE FROM Radiologist WHERE RadiologistID = %s', (doctor_id,))
+    connection.commit()
+    return redirect(url_for('admin'))
 
 
+
+@app.roure("/patient_profile")
+def patient_profile():
+    render_template('patient.html')
 if __name__ == "__main__":
     app.run()
