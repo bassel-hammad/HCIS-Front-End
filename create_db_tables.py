@@ -82,6 +82,7 @@ CREATE TABLE IF NOT EXISTS Appointments (
     EndHour TIME NOT NULL,
     Purpose TEXT,
     Cost INT,
+    CostAfterInsurance INT,
     ScanTypeID INT REFERENCES ScanTypes(ScanTypeID), -- Add ScanTypeID column
     CONSTRAINT fk_patient_appointment FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
     CONSTRAINT fk_physician FOREIGN KEY (PhysicianID) REFERENCES Radiologist(RadiologistID)
