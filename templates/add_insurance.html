@@ -14,13 +14,19 @@
 <body>
   <div class="container">
     <h2>Add Insurance Details</h2>
+    <!-- Display message if it exists -->
+    {% if message %}
+    <div class="alert alert-info" role="alert">
+      {{ message }}
+    </div>
+    {% endif %}
     <form action="{{ url_for('add_insurance') }}" method="post" class="insurance-form">
       <div class="form-row">
         <label for="insuranceCompany">Insurance Company:</label>
         <select id="insuranceCompany" name="insuranceCompany" class="form-select" required>
           <!-- Populate this dropdown with insurance company options -->
           {% for company in insurance_companies %}
-            <option value="{{ company.CompanyID }}">{{ company.CompanyName }}</option>
+            <option value="{{ company['companyid'] }}">{{ company['companyname'] }}</option>
           {% endfor %}
         </select>
       </div>

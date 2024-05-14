@@ -222,6 +222,7 @@ def patient():
     return render_template('add_insurance.html')
     return render_template('patient.html',patient=[1,2,3,4,5,6,7])
 
+import datetime
 
 @app.route("/add_insurance", methods=["POST","GET"])
 def add_insurance():
@@ -229,38 +230,52 @@ def add_insurance():
     if request.method == "POST":
         # Retrieve data from the form
         insurance_company = request.form["insuranceCompany"]
-        policy_number = request.form["policyNumber"]
-        policy_start_date = request.form["policyStartDate"]
-        policy_end_date = request.form["policyEndDate"]
-        deductible_amount = request.form["deductibleAmount"]
-        copayment_amount = request.form["copaymentAmount"]
-        max_coverage_amount = request.form["maxCoverageAmount"]
-        copayment_max = request.form["copaymentMax"]
-        if (deductible_amount<0):
-            msg+='Deductible amount cannot be negative \n '
-        if (copayment_amount<0):
-            msg+="copayment amount cannot  be negative \n"
-        if (max_coverage_amount<0):
-            msg+="max covrage  cannot  be negative \n"
-        if (copayment_max<0):
-            msg+="max copayment  cannot  be negative \n"
-        if msg == "":      
-            query_to_get_patient_id="SELECT PatientID FROM Patients WHERER  UserName=%s"
+        policy_number = int(request.form["policyNumber"])
+        policy_start_date_str = request.form["policyStartDate"]
+        policy_end_date_str = request.form["policyEndDate"]
+        deductible_amount = int(request.form["deductibleAmount"])
+        copayment_amount = int(request.form["copaymentAmount"])
+        max_coverage_amount = int(request.form["maxCoverageAmount"])
+        copayment_max = int(request.form["copaymentMax"])
+        
+        # Convert date strings to datetime objects
+        try:
+            policy_start_date = datetime.datetime.strptime(policy_start_date_str, "%Y-%m-%d").date()
+            policy_end_date = datetime.datetime.strptime(policy_end_date_str, "%Y-%m-%d").date()
+        except ValueError:
+            msg += "Invalid date format. Please use YYYY-MM-DD format for dates.\n"
+        
+        # Check if the policy end date is after the policy start date
+        if policy_start_date >= policy_end_date:
+            msg += "Policy end date must be after the policy start date.\n"
+        
+        # Validate other fields for negativity
+        if deductible_amount < 0:
+            msg += "Deductible amount cannot be negative.\n"
+        if copayment_amount < 0:
+            msg += "Copayment amount cannot be negative.\n"
+        if max_coverage_amount < 0:
+            msg += "Max coverage amount cannot be negative.\n"
+        if copayment_max < 0:
+            msg += "Copayment max amount cannot be negative.\n"
+        
+        if msg=="":
+            print("djdjd")
+            query_to_get_patient_id = "SELECT PatientID FROM Patients WHERE UserName = %s"
             cursor.execute(query_to_get_patient_id, (session['username'],))
-            patient_id=cursor.fetchone()
+            patient_id = cursor.fetchone()
             if patient_id:
-                patient_id=patient_id[0]
-            # Save the data to the database (you need to implement this part)
-                insert_query = '''INSERT INTO InsurancePolicy ( PolicyNumber, CompanyID, PatientID, PolicyStartDate, PolicyEndDate, DeductibleAmount, CopaymentAmount, MaxCoverageAmount, CopaymentMax)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
-            '''
+                patient_id = patient_id[0]
+                # Save the data to the database
+                insert_query = '''INSERT INTO InsurancePolicy (PolicyNumber, CompanyID, PatientID, PolicyStartDate, PolicyEndDate, DeductibleAmount, CopaymentAmount, MaxCoverageAmount, CopaymentMax)
+                                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
                 cursor.execute(insert_query, (policy_number, insurance_company, patient_id, policy_start_date, policy_end_date, deductible_amount, copayment_amount, max_coverage_amount, copayment_max))
-
                 # Commit the transaction
                 connection.commit()
-                msg="Data added successfully"
-    companies_data=find_all("InsuranceCompany")
-    print(companies_data)
-    return render_template('add_insurance.html',message=msg,insurance_companies=companies_data)
+                msg = "Data added successfully"
+    
+    companies_data = find_all("InsuranceCompany")
+    return render_template('add_insurance.html', message=msg, insurance_companies=companies_data)
+
 if __name__ == "__main__":
     app.run()
