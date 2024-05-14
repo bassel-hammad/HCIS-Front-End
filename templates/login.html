@@ -266,6 +266,11 @@
               </div>
             </div>
           </div>
+          {% if message %}
+          <div class="alert alert-info" role="alert">
+            {{ message }}
+          </div>
+          {% endif %}
         </section>
       
     </section>

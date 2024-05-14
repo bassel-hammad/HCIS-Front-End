@@ -6,6 +6,8 @@ from datetime import datetime
 import secrets
 import string
 
+
+
 app = Flask(__name__)
 # Set the secret key
 app.config['SECRET_KEY'] = '1234'
@@ -70,7 +72,8 @@ def login():
             password=request.form['password1']
             birthdate_str=request.form['birthdate']
             # Convert date string to datetime object
-            birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d')
+            birthdate = datetime.strptime(birthdate_str, '%Y-%m-%d').date()
+            
             if username:
                 query_check_username_uniqueness ="SELECT UserName FROM Patients WHERE UserName=%s"
                 cursor.execute(query_check_username_uniqueness, (username,))
@@ -97,7 +100,7 @@ def login():
                     if userType=="Admins_accounts":
                         return redirect("/admin")
                     elif userType=="Patients":
-                        return redirect("//patient")
+                        return redirect("/patient")
                     elif userType=="Radiologist":
                         return "HEllO IN DOCTOR PAGE"
                 else:
@@ -217,12 +220,8 @@ def delete_doctor_route():
 
 
 
-@app.route("/patient")
-def patient():
-    return render_template('add_insurance.html')
-    return render_template('patient.html',patient=[1,2,3,4,5,6,7])
 
-import datetime
+
 
 @app.route("/add_insurance", methods=["POST","GET"])
 def add_insurance():
@@ -276,6 +275,26 @@ def add_insurance():
     
     companies_data = find_all("InsuranceCompany")
     return render_template('add_insurance.html', message=msg, insurance_companies=companies_data)
+
+
+@app.route('/patient')
+def patient():
+    # Retrieve patient data
+    patient_query = "SELECT * FROM Patients WHERE UserName = %s"
+    cursor.execute(patient_query, (session['username'],))
+    patient =dict(cursor.fetchone())
+
+    # Retrieve patient scans
+    #scans_query = "SELECT * FROM Scans WHERE patient_id = %s"
+    #cursor.execute(scans_query, (patient_id,))
+    #scans = cursor.fetchall()
+
+    return render_template('patient.html', patient=patient)
+
+@app.route('/book_scan')
+def book_scan():
+    return "HELLO"
+
 
 if __name__ == "__main__":
     app.run()

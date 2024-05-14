@@ -29,6 +29,11 @@ CREATE TABLE IF NOT EXISTS Radiologist (
     Password VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS ScanTypes (
+    ScanTypeID SERIAL PRIMARY KEY,
+    ScanTypeName VARCHAR(100) NOT NULL,
+    Cost INT NOT NULL
+);
 CREATE TABLE IF NOT EXISTS InsuranceCompany (
     CompanyID SERIAL PRIMARY KEY,
     CompanyName VARCHAR(100),
@@ -58,7 +63,7 @@ CREATE TABLE IF NOT EXISTS ImagingReport (
     StudyDate DATE,
     OrderingPhysician VARCHAR(150),
     RadiologistID INT,
-    Image BYTEA,
+    Image VARCHAR(100),
     ReportText TEXT,
     Impressions TEXT,
     Recommendations TEXT,
@@ -77,6 +82,7 @@ CREATE TABLE IF NOT EXISTS Appointments (
     EndHour TIME NOT NULL,
     Purpose TEXT,
     Cost INT,
+    ScanTypeID INT REFERENCES ScanTypes(ScanTypeID), -- Add ScanTypeID column
     CONSTRAINT fk_patient_appointment FOREIGN KEY (PatientID) REFERENCES Patients(PatientID),
     CONSTRAINT fk_physician FOREIGN KEY (PhysicianID) REFERENCES Radiologist(RadiologistID)
 );
@@ -102,7 +108,7 @@ CREATE TABLE IF NOT EXISTS PatientCost (
     Date DATE,
     CONSTRAINT fk_patient_cost FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
 );
-INSERT INTO Admins_accounts(UserName,Password) VALUES('admin1','1234');
+
 '''
 # Defining database connection parameters
 # Please replace the values with your own credentials.
@@ -126,6 +132,16 @@ finally:
     if connection:
         cursor.execute(creation_query)
         connection.commit()
+
+
+        try:
+            cursor.execute("INSERT INTO Admins_accounts (UserName, Password) VALUES (%s, %s)", ('admin1', '1234'))
+            connection.commit()
+            print("Record inserted successfully.")
+        except psycopg2.Error as e:
+            connection.rollback()
+            print("Error:", e)
+
         cursor.close()
         connection.close()
         print("Database connection closed.")
