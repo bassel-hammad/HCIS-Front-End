@@ -20,7 +20,7 @@
         <select id="insuranceCompany" name="insuranceCompany" class="form-select" required>
           <!-- Populate this dropdown with insurance company options -->
           {% for company in insurance_companies %}
-          <option value="{{ company.CompanyID }}">{{ company.CompanyName }}</option>
+            <option value="{{ company.CompanyID }}">{{ company.CompanyName }}</option>
           {% endfor %}
         </select>
       </div>
@@ -53,6 +53,11 @@
       <div class="form-row">
         <label for="maxCoverageAmount">Max Coverage Amount:</label>
         <input type="number" id="maxCoverageAmount" name="maxCoverageAmount" required>
+      </div>
+
+      <div class="form-row">
+        <label for="copaymentMax">Copayment Max:</label>
+        <input type="number" id="copaymentMax" name="copaymentMax" required>
       </div>
 
       <div class="form-row button-submit">

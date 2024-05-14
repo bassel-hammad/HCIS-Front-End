@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS InsurancePolicy (
     DeductibleAmount INT,
     CopaymentAmount INT,
     MaxCoverageAmount INT,
+    CopaymentMax INT,
     CONSTRAINT fk_patient FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
 );
 
