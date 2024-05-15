@@ -55,39 +55,30 @@
     <div class="info-container">
         <h1>Patient Information</h1>
         <div class="patient-info">
-          <p class="label">Full Name:</p>
-          <p class="data">Nadine Nabil</p>
+            <p class="label">Full Name:</p>
+            <p class="data">{{ patient['fullname'] }}</p>
         </div>
         <div class="patient-info">
-          <p class="label">Username:</p>
-          <p class="data">Nadine27</p>
+            <p class="label">Username:</p>
+            <p class="data">{{ patient['username'] }}</p>
         </div>
         <div class="patient-info">
             <p class="label">ID:</p>
-            <p class="data">42000</p>
+            <p class="data">{{ patient['patientid'] }}</p>
         </div>
-    
         <div class="patient-info">
             <p class="label">SSN:</p>
-            <p class="data">304087905</p>
+            <p class="data">{{ patient['ssn'] }}</p>
         </div>
         <div class="patient-info">
             <p class="label">Email:</p>
-            <p class="data">nadine@hmail.com</p>
+            <p class="data">{{ patient['email'] }}</p>
         </div>
-      
-    
         <div class="patient-info">
             <p class="label">Birthdate:</p>
-            <p class="data">5/8/2008</p>
+            <p class="data">{{ patient['dateofbirth'] }}</p>
         </div>
         <div class="patient-info">
-            <p class="label">Address:</p>
-            <p class="data"> 25 Street, cairo</p>
-        </div>
-        <div class="patient-info">
-            <p class="label">Phone Number:</p>
-            <p class="data">0100808207</p>
         </div>
         <!-- Add more patient information fields as needed -->
     </div>
