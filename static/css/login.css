@@ -138,7 +138,7 @@ a.brand-logo {
 }
 
 .btn:hover {
-    background: #FF71CD !important;
+    background: #e283b1 !important;
     transform: translateY(-2px);
 }
 
@@ -152,7 +152,7 @@ a.brand-logo {
 .register,
 .login {
     border-radius: 5px;
-    box-shadow: 2px 9px 49px -17px rgba(0, 0, 0, 0.1);
+    box-shadow:  #e05599;
     height: auto;
     max-width: 400px;
     padding: 40px 15px;
@@ -176,14 +176,14 @@ a.brand-logo {
 
 .register span,
 .login span {
-    color: #696687;
+    color: #e05599;
     font-size: 18px;
     opacity: .8;
 }
 
 .register .create-account,
 .login .create-account {
-    border-top: 1px solid #e2e2e2;
+    border-top: 1px solid #e05599;
     display: flex;
     justify-content: center;
     margin-top: 25px;
@@ -212,6 +212,7 @@ a.brand-logo {
 .login .form .form-row {
     position: relative;
     text-align: left;
+    margin-bottom: 20px;
 }
 
 .register .form .form-row .fas,
@@ -228,8 +229,12 @@ a.brand-logo {
 .login .form .form-row.bottom {
     display: flex;
     justify-content: space-between;
+    margin-top: 20px;
 }
 
+.register-form .form-row.birthdate-row {
+    margin-bottom: 20px;
+}
 .register .form .form-row.bottom .forgot,
 .login .form .form-row.bottom .forgot {
     color: #FF71CD !important;
@@ -441,10 +446,9 @@ a.brand-logo {
 
 /* Style for form labels */
 .form-label {
-    position: absolute;
-    top: 50%;
+
+    top: 0;
     left: 10px;
-    transform: translateY(-50%);
     color: #333;
 }
 
@@ -453,7 +457,7 @@ a.brand-logo {
 /* Styling for the form row */
 .form-row {
     position: relative;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 
 /* Style for font-awesome icons */
@@ -465,21 +469,12 @@ a.brand-logo {
     color: #8B93FF; /* Adjust the color as needed */
 }
 
-/* Style for form labels */
-.form-label {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #333;
-}
 
 
 /* Style for form input and password field */
 .form-text {
-    width: calc(100% - 30px); /* Adjust the width to accommodate the icon */
-    padding: 10px;
-    padding-right: 30px; /* Space for the icon */
+    width: calc(100% - 20px); /* Adjust the width to accommodate the icon */
+    padding: 30px 10px 20px 10px;
     border: 1px solid #3498db;
     border-radius: 5px;
     background-color: #fff;
@@ -489,9 +484,8 @@ a.brand-logo {
 
 /* Styling for the select element */
 .form-select {
-    width: calc(100% - 30px); /* Adjust the width to accommodate the icon */
-    padding: 10px;
-    padding-right: 30px; /* Space for the icon */
+    width: calc(100% - 20px); /* Adjust the width to accommodate the icon */
+    padding: 30px 10px 10px 10px;
     border: 1px solid #5755FE;
     border-radius: 5px;
     background-color: #fff;
@@ -526,7 +520,7 @@ a.brand-logo {
 
 /* Styling for the login button */
 .btn-login {
-    background-color: #8B93FF;
+    background-color: #e05599;
     color: #fff;
     padding: 10px 20px;
     border: none;
