@@ -16,6 +16,10 @@ app.config['SECRET_KEY'] = '1234'
 DOC_IMG_FOLDER = 'static/doctors_images/'
 app.config['UPLOAD_DOC_IMG']=DOC_IMG_FOLDER
 
+#folder for Scans images
+SCAN_IMG_FOLDER = 'static/scans/'
+app.config['UPLOAD_SCAN_IMG']=SCAN_IMG_FOLDER
+
 # Defining database connection parameters  print(Radiologists[0])
 # Please replace the values with your own credentials.
 db_params = {
@@ -433,10 +437,9 @@ def book_scan():
 
 @app.route('/doctor')
 def doctor():
-    patient_query = "SELECT * FROM Radiologist WHERE UserName = %s"
-    cursor.execute(patient_query, (session['username'],))
+    doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+    cursor.execute(doctor_query, (session['username'],))
     radiologist =dict(cursor.fetchone())
-    print(radiologist)
     # Render the HTML template for the doctor's dashboard
     return render_template('Radiologydoctor.html',doctor=radiologist)
 
@@ -471,7 +474,111 @@ def my_calendar():
 
 @app.route('/my_patients', methods=['GET', 'POST'])
 def my_patients():
-    return render_template("my_patinents.html",doctor={1,2,3,4,5})
+    doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+    cursor.execute(doctor_query, (session['username'],))
+    radiologist =dict(cursor.fetchone())
+    radiologist_id =radiologist['radiologistid']
+    # Fetch doctor information from the database
+    cursor.execute('SELECT * FROM Radiologist WHERE RadiologistID = %s', (radiologist_id,))
+    
+
+    # Fetch patients of the doctor
+    cursor.execute('''
+        SELECT p.PatientID AS id, p.FullName AS fullname 
+        FROM Patients p
+        JOIN Appointments a ON p.PatientID = a.PatientID
+        WHERE a.PhysicianID = %s
+    ''', (radiologist_id,))
+    patients = cursor.fetchall()
+    doc_patients = [dict(row) for row in patients]
+    # Render the template with doctor and patients data
+    return render_template('my_patinents.html', patients=doc_patients,doctor=radiologist)
+
+
+
+from flask import render_template, request
+
+@app.route('/show_scans', methods=['POST','GET'])
+def show_scans():
+    if request.method=='GET':
+        # Get the value of the 'doctor_id' parameter from the URL
+        patient_id = request.args.get('patient_id')
+    msg = ''
+    scan_info = None
+    
+    if request.method == 'POST':
+        patient_id = request.form['patientId']
+        scan_type = request.form['scanType']
+        
+        # Query the database to fetch scan information based on the selected scan type
+        cursor.execute('''
+            SELECT * FROM ImagingReport 
+            WHERE PatientID = %s AND StudyType = %s
+        ''', (patient_id, scan_type))
+        
+        scan_info = dict(cursor.fetchone())
+        print(scan_info)
+        
+        if not scan_info:
+            msg = 'No scan found for the selected scan type.'
+    
+    cursor.execute('SELECT * FROM Patients WHERE PatientID = %s', (patient_id,))
+    patient = dict(cursor.fetchone())
+    
+    # Fetch all scan types for the dropdown menu
+    cursor.execute('SELECT *  FROM ImagingReport WHERE PatientID = %s', (patient_id,))
+    scan_types = [row['studytype'] for row in cursor.fetchall()]
+    
+    return render_template('show_scans.html', patient=patient, msg=msg, scan_info=scan_info, scan_types=scan_types)
+
+
+
+@app.route('/add_scan', methods=['GET', 'POST'])
+def add_scan():
+    msg = ''
+    if request.method=='GET':
+        # Get the value of the 'doctor_id' parameter from the URL
+        patient_id = request.args.get('patient_id')
+    if request.method == 'POST':
+        # Fetching radiologist information
+        doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+        cursor.execute(doctor_query, (session['username'],))
+        radiologist = dict(cursor.fetchone())
+        radiologist_id = radiologist['radiologistid']
+        
+        # Extracting form data
+        study_type = request.form['studyType']
+        study_date = request.form['studyDate']
+        report_text = request.form['reportText']
+        patient_id= request.form['patientId']
+        # Handling scan image upload
+        if 'scanImage' in request.files:
+            
+            scan_image = request.files['scanImage']
+            if scan_image.filename:
+                # Saving the scan image to the specified folder
+                file_data = scan_image.filename.split(".")
+                filename = str(patient_id) + "_" + file_data[0] + "." + file_data[1]
+                file_path = os.path.join(app.config['UPLOAD_SCAN_IMG'], filename)
+                scan_image.save(file_path)
+            else:
+                file_path = None
+        else:
+            file_path = None
+
+        # Inserting scan record into the database
+        cursor.execute('''
+            INSERT INTO ImagingReport (PatientID, StudyType, StudyDate, OrderingPhysician, Image, ReportText)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        ''', (patient_id, study_type, study_date, radiologist_id, file_path, report_text))
+        connection.commit()
+        msg = 'Scan added successfully'
+
+    cursor.execute('SELECT * FROM Patients WHERE PatientID = %s', (patient_id,))
+    patient = dict(cursor.fetchone())
+    return render_template('add_scan.html', patient=patient, msg=msg)
+
+
 
 if __name__ == "__main__":
     app.run()

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Show Scans</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/patient.css') }}">
+  <style>
+    .form-container {
+      background-color: #f9f9f9;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-row {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 4px;
+    }
+    .img-preview {
+      margin-top: 20px;
+      max-width: 100%;
+      max-height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Show Scans</h2>
+    
+    <!-- Show Scans Form -->
+    <div class="form-container">
+      <!-- Display message -->
+      <div class="alert alert-success" role="alert" style="display: {{ 'block' if msg else 'none' }}">
+        {{ msg }}
+      </div>
+
+      <form action="{{ url_for('show_scans') }}" method="POST">
+        <input type="hidden" id="patientId" name="patientId" value="{{ patient.patientid }}">
+        <div class="form-row">
+          <label for="patientName" class="form-label">Patient Name:</label>
+          <p id="patientName">{{ patient.fullname }}</p>
+        </div>
+        <div class="form-row">
+          <label for="scanType" class="form-label">Scan Type:</label>
+          <select id="scanType" name="scanType" class="form-control" required>
+            <option value="">Select Scan Type</option>
+            {% for scan_type in scan_types %}
+            <option value="{{ scan_type }}">{{ scan_type }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn btn-primary">Show Scan</button>
+        </div>
+      </form>
+
+      {% if scan_info %}
+      <div class="form-row">
+        <h4>Scan Information</h4>
+        <p><strong>Scan Type:</strong> {{ scan_info.studytype }}</p>
+        <p><strong>Study Date:</strong> {{ scan_info.studydate }}</p>
+        <p><strong>Report Text:</strong> {{ scan_info.reporttext }}</p>
+        {% if scan_info.impressions %}
+        <p><strong>Impressions:</strong> {{ scan_info.impressions }}</p>
+        {% endif %}
+        {% if scan_info.recommendations %}
+        <p><strong>Recommendations:</strong> {{ scan_info.recommendations }}</p>
+        {% endif %}
+        <div class="img-preview">
+            <img src={{scan_info.image}} alt="Scan Image">>
+        </div>
+      </div>
+      {% endif %}
+
+    <!-- Button to return to doctor's patients -->
+    <div class="form-row">
+      <a href="{{ url_for('my_patients') }}" class="btn btn-secondary">Back to My Patients</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>
