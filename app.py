@@ -22,7 +22,7 @@ db_params = {
     "host": "localhost",
     "database": "department", # The name of the database you want to use, it  should be already created in PostgreSQL
     "user": "postgres",#"your-username",
-    "password": "root",#"your-password",
+    "password": "2929",#"your-password",
     "port":5432
 }
 try:
@@ -174,7 +174,7 @@ def login():
                     elif userType=="Patients":
                         return redirect("/patient")
                     elif userType=="Radiologist":
-                        return "HEllO IN DOCTOR PAGE"
+                        return redirect("/doctor")
                 else:
                     Message="Wrong username or password"
                       
@@ -417,10 +417,57 @@ def book_scan():
 
                 # Commit the transaction
                 connection.commit()
+                msg = "Appointment created successfully"
+
+    query = "SELECT * FROM Appointments WHERE PatientID = %s;"
+
+    # Execute the SQL query with the patient ID as parameter
+    cursor.execute(query, (patient_id,))
+
+    # Fetch all the results
+    appointments = cursor.fetchall()
+    patient_appointments = [dict(row) for row in appointments]
     # Render a success or confirmation page
-    return render_template('patient_appointments.html', patient=patient,msg=msg)
+    return render_template('patient_appointments.html', patient=patient,msg=msg,appointments=patient_appointments)
 
 
+@app.route('/doctor')
+def doctor():
+    patient_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+    cursor.execute(patient_query, (session['username'],))
+    radiologist =dict(cursor.fetchone())
+    print(radiologist)
+    # Render the HTML template for the doctor's dashboard
+    return render_template('Radiologydoctor.html',doctor=radiologist)
+
+
+
+@app.route('/my_calendar', methods=['GET', 'POST'])
+def my_calendar():
+    if request.method == 'POST':
+        date = request.form['appointment_date']
+        if  date:
+            pass
+        else:
+            return render_template('calendar.html')
+
+        doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+        cursor.execute(doctor_query, (session['username'],))
+        radiologist =dict(cursor.fetchone())
+        date = request.form['appointment_date']
+        query = '''
+            SELECT a.Purpose, a.AppointmentDate, a.StartHour, a.EndHour, p.FullName
+            FROM Appointments a
+            INNER JOIN Patients p ON a.PatientID = p.PatientID
+            WHERE a.AppointmentDate = %s AND a.PhysicianID = %s
+        '''
+        cursor.execute(query, (date,radiologist['radiologistid']))
+        appointments = cursor.fetchall()
+        data = [dict(row) for row in appointments]
+        print(len(data))
+        print(data)
+        return render_template('appointments.html', appointments=data, date=date)
+    return render_template('calendar.html')
 
 
 if __name__ == "__main__":

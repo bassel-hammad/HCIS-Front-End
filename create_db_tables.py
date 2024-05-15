@@ -119,7 +119,7 @@ db_params = {
     "host": "localhost",
     "database": "department", # The name of the database you want to use, it  should be already created in PostgreSQL
     "user": "postgres",#"your-username",
-    "password": "root",#"your-password",
+    "password": "2929",#"your-password",
     "port":5432
 }
 try:
