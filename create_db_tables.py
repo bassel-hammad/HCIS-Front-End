@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS InsurancePolicy (
     PolicyEndDate DATE,
     DeductibleAmount INT,
     CopaymentAmount INT,
+    CopaymentPercentage INT,
     MaxCoverageAmount INT,
     CopaymentMax INT,
     CONSTRAINT fk_patient FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
@@ -78,8 +79,8 @@ CREATE TABLE IF NOT EXISTS Appointments (
     PatientID INT REFERENCES Patients(PatientID),
     PhysicianID INT,
     Duration INTEGER,
-    StartHour TIME NOT NULL,
-    EndHour TIME NOT NULL,
+    StartHour INT NOT NULL,
+    EndHour INT NOT NULL,
     Purpose TEXT,
     Cost INT,
     CostAfterInsurance INT,
@@ -109,6 +110,7 @@ CREATE TABLE IF NOT EXISTS PatientCost (
     Date DATE,
     CONSTRAINT fk_patient_cost FOREIGN KEY (PatientID) REFERENCES Patients(PatientID)
 );
+
 
 '''
 # Defining database connection parameters

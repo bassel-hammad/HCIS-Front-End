@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, session,flash,get_f
 import psycopg2
 import os
 import psycopg2.extras
-from datetime import datetime
+from datetime import datetime,timedelta
 import secrets
 import string
 
@@ -45,6 +45,78 @@ def find_all(table_name):
     result=cursor.fetchall()
     data = [dict(row) for row in result]
     return data
+
+import psycopg2
+
+def calculate_payments(patient_id, scan_cost):
+        # Check if the patient ID exists in the InsurancePolicy table
+        cursor.execute("SELECT DeductibleAmount, CopaymentPercentage, CopaymentMax, MaxCoverageAmount FROM InsurancePolicy WHERE PatientID = %s", (patient_id,))
+        insurance_record = cursor.fetchone()
+
+        if insurance_record:
+            # Patient has insurance, calculate payment after insurance
+
+            deductible_amount, copayment_percentage, copayment_max, max_coverage_amount = insurance_record
+            
+            # Subtract deductible amount from scan cost
+            remaining_cost = scan_cost - deductible_amount
+            
+            # Apply copayment
+            if copayment_percentage > 0:
+                copayment_amount = remaining_cost * (copayment_percentage / 100)
+                copayment_amount = min(copayment_amount, copayment_max)
+                patient_payment = remaining_cost - copayment_amount
+            
+            # Calculate insurance's payment
+            insurance_payment = min(scan_cost - patient_payment, max_coverage_amount)
+            
+            # Update patient's payment based on insurance payment
+            patient_payment = scan_cost - insurance_payment
+
+            return patient_payment
+
+        else:
+            # Patient doesn't have insurance, return the scan cost
+            return scan_cost
+import psycopg2
+
+def get_available_doctor(start_hour, appointment_date):
+        # Query to get doctors who don't have appointments at the specified time
+        cursor.execute("""
+            SELECT RadiologistID 
+            FROM Radiologist 
+            WHERE RadiologistID NOT IN (
+                SELECT PhysicianID 
+                FROM Appointments 
+                WHERE AppointmentDate = %s 
+                AND StartHour = %s
+            )
+        """, (appointment_date, start_hour))
+        available_doctors = cursor.fetchall()
+
+        # Check if there are available doctors
+        if len(available_doctors)==0:
+            return None
+
+        # Select the doctor with the minimum sum of durations
+        min_sum_duration = float('inf')
+        selected_doctor = None
+        for row in available_doctors:
+            row=dict(row)
+            print(row)
+            cursor.execute("""
+                SELECT SUM(Duration) 
+                FROM Appointments 
+                WHERE AppointmentDate = %s 
+                AND PhysicianID = %s
+            """, (appointment_date, row["radiologistid"]))
+            sum_duration = cursor.fetchone()[0] or 0  # If no appointments, sum_duration will be None
+            if sum_duration < min_sum_duration:
+                min_sum_duration = sum_duration
+                selected_doctor = row["radiologistid"]
+
+        return selected_doctor
+
 
 def get_var_name(var):
     for name, value in locals().items():
@@ -259,7 +331,7 @@ def add_insurance():
             msg += "Copayment max amount cannot be negative.\n"
         
         if msg=="":
-            print("djdjd")
+            
             query_to_get_patient_id = "SELECT PatientID FROM Patients WHERE UserName = %s"
             cursor.execute(query_to_get_patient_id, (session['username'],))
             patient_id = cursor.fetchone()
@@ -289,11 +361,66 @@ def patient():
     #cursor.execute(scans_query, (patient_id,))
     #scans = cursor.fetchall()
 
-    return render_template('patient.html', patient=patient)
+    return render_template('view_patient_info.html', patient=patient)
 
-@app.route('/book_scan')
+
+
+@app.route('/book_scan', methods=['POST','GET'])
 def book_scan():
-    return "HELLO"
+    msg=""
+    _continue_=True
+    if request.method == 'POST':
+        # Retrieve form data
+        scan_type = request.form['scanType']
+        appointment_date = request.form['appointmentDate']
+        start_hour = request.form['startHour']
+        purpose = request.form['purpose']
+        end_hour = int(start_hour) + 1
+        duration = 1
+        
+        query_to_get_patient_id = "SELECT PatientID FROM Patients WHERE UserName = %s"
+        cursor.execute(query_to_get_patient_id, (session['username'],))
+        patient_id = cursor.fetchone()
+        if patient_id:
+            patient_id = patient_id[0]
+        else:
+            _continue_=False
+
+        if scan_type != 'null':
+            cursor.execute("SELECT Cost FROM ScanTypes WHERE ScanTypeID = %s", (scan_type,))
+            # Fetch the result
+            cost_row = cursor.fetchone()
+        else:
+            msg = msg+"Please select a scan type \n"
+            _continue_=False
+
+        # Check if the result exists
+        if _continue_ and cost_row:
+            # Extract the cost from the result
+            cost = int(cost_row[0])
+            cost_after_insurance = calculate_payments(patient_id, cost)
+
+            doctor_id = get_available_doctor(start_hour, appointment_date)
+            if doctor_id == None:
+                msg = "No doctor available for this time"
+                _continue_ = False
+
+            if _continue_:
+                end_hour = int(start_hour) + duration
+
+                # Insert data into the Appointments table
+                query = '''
+                    INSERT INTO Appointments (ScanTypeID, AppointmentDate, PatientID, PhysicianID, Duration, StartHour, EndHour, Purpose, Cost, CostAfterInsurance) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                '''
+                cursor.execute(query, (scan_type, appointment_date, patient_id, doctor_id, duration, start_hour, end_hour, purpose, cost, cost_after_insurance))
+
+                # Commit the transaction
+                connection.commit()
+    # Render a success or confirmation page
+    return render_template('patient_appointments.html', patient=patient,msg=msg)
+
+
 
 
 if __name__ == "__main__":
