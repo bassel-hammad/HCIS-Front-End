@@ -1,60 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Information</title>
     <style>
-      body {
-        font-family: "Arial", sans-serif;
-        background-color: #f4f4f4;
-        margin: 0;
-        padding: 20px;
-        box-sizing: border-box;
-        text-align: center;
-        color: #333;
-      }
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #FFF7FC;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: #333;
+        }
 
-      h2 {
-        color: #007bff;
-        margin-bottom: 20px;
-      }
+        h1 {
+            color: #8B93FF;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-      p {
-        margin: 10px 0;
-      }
+        .info-container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-      .info-container {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        padding: 20px;
-        max-width: 400px;
-        margin: 0 auto;
-      }
+        .patient-info {
+            margin-bottom: 15px;
+        }
 
-      p:first-child {
-        font-weight: bold;
-        font-size: 18px;
-        color: #007bff;
-      }
+        .label {
+            font-weight: bold;
+            color: #8B93FF;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
 
-      /* Optional: Add more styling to customize the appearance */
+        .data {
+            color: #555;
+        }
+
+        @media screen and (max-width: 600px) {
+            .info-container {
+                padding: 20px;
+            }
+        }
     </style>
-  </head>
-
-  <body>
+</head>
+<body>
     <div class="info-container">
-      <h2>Patient Information</h2>
-      <p>ID: {{ patient_info[0] }}</p>
-      <p>SSN: {{ patient_info[1] }}</p>
-      <p>Email: {{ patient_info[2] }}</p>
-      <p>Username: {{ patient_info[3] }}</p>
-      <p>Full Name: {{ patient_info[5] }}</p>
-      <p>Birthdate: {{ patient_info[6] }}</p>
-      <!-- Add more patient information as needed -->
+        <h1>Patient Information</h1>
+        <div class="patient-info">
+          <p class="label">Full Name:</p>
+          <p class="data">Nadine Nabil</p>
+        </div>
+        <div class="patient-info">
+          <p class="label">Username:</p>
+          <p class="data">Nadine27</p>
+        </div>
+        <div class="patient-info">
+            <p class="label">ID:</p>
+            <p class="data">42000</p>
+        </div>
+    
+        <div class="patient-info">
+            <p class="label">SSN:</p>
+            <p class="data">304087905</p>
+        </div>
+        <div class="patient-info">
+            <p class="label">Email:</p>
+            <p class="data">nadine@hmail.com</p>
+        </div>
+      
+    
+        <div class="patient-info">
+            <p class="label">Birthdate:</p>
+            <p class="data">5/8/2008</p>
+        </div>
+        <div class="patient-info">
+            <p class="label">Address:</p>
+            <p class="data"> 25 Street, cairo</p>
+        </div>
+        <div class="patient-info">
+            <p class="label">Phone Number:</p>
+            <p class="data">0100808207</p>
+        </div>
+        <!-- Add more patient information fields as needed -->
     </div>
-  </body>
+</body>
 </html>
