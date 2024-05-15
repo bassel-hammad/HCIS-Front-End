@@ -16,13 +16,13 @@ app.config['SECRET_KEY'] = '1234'
 DOC_IMG_FOLDER = 'static/doctors_images/'
 app.config['UPLOAD_DOC_IMG']=DOC_IMG_FOLDER
 
-# Defining database connection parameters
+# Defining database connection parameters  print(Radiologists[0])
 # Please replace the values with your own credentials.
 db_params = {
     "host": "localhost",
     "database": "department", # The name of the database you want to use, it  should be already created in PostgreSQL
     "user": "postgres",#"your-username",
-    "password": "2929",#"your-password",
+    "password": "root",#"your-password",
     "port":5432
 }
 try:
@@ -113,7 +113,7 @@ def admin():
     """Admin page"""
     if(session['userType']=="Admins_accounts"):
         Radiologists=find_all("Radiologist")
-        print(Radiologists[0])
+
         return render_template("admin2.html",doctors=Radiologists)
     else:
         return redirect("/")  #if not logged in as an Admin go to home page

@@ -6,7 +6,7 @@ db_params = {
     "host": "localhost",
     "database": "department",  # Replace with your database name
     "user": "postgres",        # Replace with your username
-    "password": "2929",        # Replace with your password
+    "password": "root",        # Replace with your password
     "port": 5432               # Replace with your database port
 }
 
