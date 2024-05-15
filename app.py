@@ -469,6 +469,9 @@ def my_calendar():
         return render_template('appointments.html', appointments=data, date=date)
     return render_template('calendar.html')
 
+@app.route('/my_patients', methods=['GET', 'POST'])
+def my_patients():
+    return render_template("my_patinents.html",doctor={1,2,3,4,5})
 
 if __name__ == "__main__":
     app.run()

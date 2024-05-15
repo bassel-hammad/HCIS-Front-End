@@ -5,7 +5,7 @@ db_params = {
     "host": "localhost",
     "database": "department",
     "user": "postgres",
-    "password": "root",
+    "password": "2929",
     "port": 5432
 }
 

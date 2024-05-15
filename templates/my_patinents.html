@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Doctor Dashboard</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/patient.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <h2>Doctor Dashboard</h2>
+    
+    <!-- Doctor Information -->
+    <div class="doctor-info">
+      <h3>Doctor Information</h3>
+      <div class="form-row">
+        <label for="doctorId">ID:</label>
+        <p id="doctorId">{{ doctor.id }}</p>
+      </div>
+      <div class="form-row">
+        <label for="doctorFullName">Full Name:</label>
+        <p id="doctorFullName">{{ doctor.fullname }}</p>
+      </div>
+      <div class="form-row">
+        <label for="doctorEmail">Email:</label>
+        <p id="doctorEmail">{{ doctor.email }}</p>
+      </div>
+      <div class="form-row">
+        <label for="doctorUsername">Username:</label>
+        <p id="doctorUsername">{{ doctor.username }}</p>
+      </div>
+    </div>
+
+    <!-- Patients Table -->
+    <h3>Patients</h3>
+    <div class="table-responsive">
+      <table class="table table-striped custom-table">
+        <thead>
+          <tr>
+            <th scope="col">Patient Id</th>
+            <th scope="col">Patient Name</th>
+            <th scope="col">Show Scans</th>
+            <th scope="col">Add Scan</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for patient in patients %}
+          <tr>
+            <td>{{ patient.id }}</td>
+            <td>{{ patient.fullname }}</td>
+            <td>
+              <a href="{{ url_for('show_scans', patient_id=patient.id) }}" class="btn btn-info">Show Scans</a>
+            </td>
+            <td>
+              <a href="{{ url_for('add_scan', patient_id=patient.id) }}" class="btn btn-primary">Add Scan</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+</body>
+
+</html>

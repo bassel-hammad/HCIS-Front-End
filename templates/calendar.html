@@ -6,26 +6,42 @@
     <title>Doctor's Appointments</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/Doctor.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" />
 </head>
-<body>
-    <div class="container">
-        <h1>Doctor's Appointments</h1>
-        <form method="POST" action="/my_calendar">
-            <div class="date-picker">
-                <label for="appointment-date">Select a date:</label>
-                <input type="text" id="appointment-date" name="appointment_date" placeholder="Choose a date" required>
-                <button type="submit" class="btn">Show Appointments</button>
-            </div>
-        </form>
-    </div>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            flatpickr("#appointment-date", {
-                dateFormat: "Y-m-d"
-            });
-        });
-    </script>
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Doctor's Appointments</h1>
+    <form method="POST" action="/my_calendar">
+      <div class="date-picker">
+        <label for="appointment-date" style="background-color:white;">   .    </label>
+        <input type="text" id="appointment-date" name="appointment_date" placeholder="Choose a date" required>
+        <button type="submit" class="btn">Show Appointments</button>
+      </div>
+    </form>
+  </div>
+
+ 
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/jquery.easing.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/Doctor.js') }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/flatpickr/4.6.9/flatpickr.min.js"></script>
+  <script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+      flatpickr("#appointment-date", {
+        dateFormat: "Y-m-d"
+      });
+    });
+  </script>
 </body>
 </html>
