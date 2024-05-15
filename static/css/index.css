@@ -61,7 +61,7 @@ banner
     border-radius: 0px;
 }
 .navbar-default {
-    background-color: #8B93FF;
+    background-color: #e05599;
     padding: 20px 0;
     transition: all 0.3s;
 }
@@ -85,7 +85,7 @@ banner
 }
 
 .navbar-default .navbar-brand, .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
-    color: #EA6045;
+    color: #e05599;
 }
 
 @media (max-width: 768px) {
@@ -111,7 +111,10 @@ banner
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:focus, .navbar-default .navbar-nav > .active > a:hover {
     color: #fff;
     text-transform: uppercase;
-    background-color: rgba(12, 184, 182, 0.21);
+    background-color: #e05599;
+}
+.navbar-default .navbar-nav > .active > a:hover {
+    background-color: #e873ac;
 }
 .navbar-default .navbar-nav > li > a
 {
@@ -124,7 +127,10 @@ banner
 {
 	color: #fff;
     text-transform: uppercase;
-    background-color: rgba(12, 184, 182, 0.21);
+    background-color : #e05599;
+}
+.navbar-default .navbar-nav > li > a:hover {
+    background-color: #e873ac;
 }
 .affix {
     background-color: #ffffff !important;
@@ -140,7 +146,7 @@ banner
 	position: relative;
 }
 .bg-color{
-	background-color: #FFF7FC;
+	background-color: #79b5c0;
 	min-height: 650px;
 }
 .banner-info{
@@ -162,9 +168,12 @@ banner
 	margin-top: 30px;
 	padding: 10px 20px;
 	font-size: 12px;
-	background-color: #5755FE;
+	background-color: #e05599;
 	border-radius: 3px;
 	color: #fff;
+}
+.btn-appoint:hover {
+    background-color: #e873ac;
 }
 .overlay-detail a i {
     text-align: center;

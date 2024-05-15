@@ -2,7 +2,9 @@
 html {
     scroll-behavior: smooth;
 }
-
+body {
+    background-color: #79b5c0;
+}
 body,
 html {
     margin: 0;
@@ -125,7 +127,7 @@ a.brand-logo {
 
 .btn {
     align-items: center;
-    background:#8B93FF;
+    background:#e05599;
     border-radius: 6px;
     border: 0;
     color: #fff;
