@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appointments on {{ date }}</title>
+    <title >Appointments on {{ date }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
+            background-color: #79b5c0 ;
             margin: 0;
             padding: 20px;
         }
@@ -22,32 +22,25 @@
 
         h1 {
             text-align: center;
-            color: #333333;
+            color: #437d87;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 10px 20px;
-            background-color: #4caf50;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn:hover {
-            background-color: #45a049;
-        }
+   
 
         .appointment-box {
-            background-color: #ffcc00;
-            padding: 10px;
-            margin-top: 20px;
+            background-color: #79b5c0;
+            padding: 20px;
+            margin-top: 15px;
+            margin-bottom: 15px;
             border-radius: 4px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 75%;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .appointment-info {
-            color: #333333;
+            color: black;
             font-size: 16px;
             margin: 0;
             padding: 0;
@@ -57,16 +50,31 @@
             text-align: center;
             color: #888888;
         }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #e05599;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+  
+
+        }
+
+        .btn:hover {
+            background-color: #e365a2;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Appointments on {{ date }}</h1>
-        <a href="/my_calendar" class="btn">Back</a>
+      
         <div class="appointments-list">
             {% if appointments %}
                 {% for appointment in appointments %}
-                    <div class="appointment-box">
+                    <div class="appointment-box " >
                         <p class="appointment-info">Patient name: {{ appointment['fullname'] }} </p>
                         <p class="appointment-info">Purpose: {{ appointment['purpose'] }}</p>
                         <p class="appointment-info">Time: {{ appointment['starthour'] }} - {{ appointment['endhour'] }}</p>
@@ -76,6 +84,7 @@
                 <p class="no-appointments">No appointments found for this date.</p>
             {% endif %}
         </div>
+        <a href="/my_calendar" class="btn">Back</a>
     </div>
 </body>
 </html>
