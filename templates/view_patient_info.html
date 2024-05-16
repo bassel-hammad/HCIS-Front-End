@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: "Arial", sans-serif;
-            background-color: #79b5c0 ;
+            background-color: #79b5c0;
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
@@ -26,7 +26,7 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 30px;
             max-width: 600px;
-            margin: 0 auto;
+            margin: 20px auto;
         }
 
         .patient-info {
@@ -39,8 +39,7 @@
             font-weight: bold;
             color: #e05599;
             text-transform: uppercase;
-            margin-bottom: 20px;
-          
+            margin-right: 10px;
         }
 
         .label,
@@ -51,7 +50,6 @@
         .data {
             color: black;
             text-transform: capitalize;
-          
         }
 
         @media screen and (max-width: 600px) {
@@ -59,9 +57,44 @@
                 padding: 20px;
             }
         }
+
+        header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #ddd;
+            padding: 20px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-button {
+            background-color: #e05599;
+            border: none;
+            border-radius: 5px;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .header-button:hover {
+            background-color: #c14481;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <a href="{{ url_for('show_scans', patient_id=patient.patientid) }}" class="header-button">My Scans</a>
+        <a href="{{ url_for('book_scan') }}" class="header-button">My Appointments</a>
+        <a href="{{ url_for('book_scan') }}" class="header-button">Book Appointment</a>
+        <a href="{{ url_for('add_insurance') }}" class="header-button">Add Insurance</a>
+        <a href="{{ url_for('index') }}" class="header-button">Back to Home</a>
+    </header>
+
     <div class="info-container">
         <h1>Patient Information</h1>
         <div class="patient-info">
@@ -87,8 +120,6 @@
         <div class="patient-info">
             <p class="label">Birthdate:</p>
             <p class="data">{{ patient['dateofbirth'] }}</p>
-        </div>
-        <div class="patient-info">
         </div>
         <!-- Add more patient information fields as needed -->
     </div>

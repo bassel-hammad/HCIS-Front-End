@@ -371,6 +371,11 @@ def patient():
 
 @app.route('/book_scan', methods=['POST','GET'])
 def book_scan():
+    query_to_get_patient = "SELECT * FROM Patients WHERE UserName = %s"
+    cursor.execute(query_to_get_patient, (session['username'],))
+    patient = dict(cursor.fetchone())
+    if patient:
+            patient_id = patient['patientid']
     msg=""
     _continue_=True
     if request.method == 'POST':
@@ -382,11 +387,8 @@ def book_scan():
         end_hour = int(start_hour) + 1
         duration = 1
         
-        query_to_get_patient_id = "SELECT PatientID FROM Patients WHERE UserName = %s"
-        cursor.execute(query_to_get_patient_id, (session['username'],))
-        patient_id = cursor.fetchone()
-        if patient_id:
-            patient_id = patient_id[0]
+        if patient:
+            patient_id = patient['patientid']
         else:
             _continue_=False
 
@@ -423,7 +425,11 @@ def book_scan():
                 connection.commit()
                 msg = "Appointment created successfully"
 
-    query = "SELECT * FROM Appointments WHERE PatientID = %s;"
+    query = '''
+        SELECT *
+        FROM Appointments a
+        JOIN ScanTypes s ON a.ScanTypeID = s.ScanTypeID
+        WHERE a.PatientID = %s;'''
 
     # Execute the SQL query with the patient ID as parameter
     cursor.execute(query, (patient_id,))
@@ -432,7 +438,8 @@ def book_scan():
     appointments = cursor.fetchall()
     patient_appointments = [dict(row) for row in appointments]
     # Render a success or confirmation page
-    return render_template('patient_appointments.html', patient=patient,msg=msg,appointments=patient_appointments)
+    print(patient_appointments)
+    return render_template('patient_appointment_managment.html', patient=patient,msg=msg,appointments=patient_appointments)
 
 
 @app.route('/doctor')
@@ -452,7 +459,7 @@ def my_calendar():
         if  date:
             pass
         else:
-            return render_template('calendar.html')
+            return render_template('doctor_search_for_appointments.html')
 
         doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
         cursor.execute(doctor_query, (session['username'],))
@@ -469,8 +476,8 @@ def my_calendar():
         data = [dict(row) for row in appointments]
         print(len(data))
         print(data)
-        return render_template('appointments.html', appointments=data, date=date)
-    return render_template('calendar.html')
+        return render_template('doctor_appointments_after_search.html', appointments=data, date=date)
+    return render_template('doctor_search_for_appointments.html')
 
 @app.route('/my_patients', methods=['GET', 'POST'])
 def my_patients():
@@ -529,7 +536,7 @@ def show_scans():
     cursor.execute('SELECT *  FROM ImagingReport WHERE PatientID = %s', (patient_id,))
     scan_types = [row['studytype'] for row in cursor.fetchall()]
     
-    return render_template('show_scans.html', patient=patient, msg=msg, scan_info=scan_info, scan_types=scan_types)
+    return render_template('show_scans.html', patient=patient, msg=msg, scan_info=scan_info, scan_types=scan_types ,usertype=session['userType'])
 
 
 

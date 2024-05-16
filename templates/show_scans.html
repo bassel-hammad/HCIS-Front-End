@@ -91,7 +91,12 @@
 
     <!-- Button to return to doctor's patients -->
     <div class="form-row">
-      <a href="{{ url_for('my_patients') }}" class="btn btn-secondary">Back to My Patients</a>
+      {% if usertype == 'Radiologist' %}
+        <a href="{{ url_for('my_patients') }}" class="btn btn-secondary">Back to My Patients</a>
+      {% endif %}
+      {% if usertype == 'Patients' %}
+        <a href="{{ url_for('patient') }}" class="btn btn-secondary">Back My Profile</a>
+      {% endif %}
     </div>
   </div>
 

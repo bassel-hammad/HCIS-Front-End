@@ -136,32 +136,29 @@
         <table class="table table-striped custom-table">
           <thead>
             <tr>
-              <th scope="col"> ID</th>
+              <th scope="col"> Scan</th>
               <th scope="col">Date</th>
-              <th scope="col">Time</th>
-              <th scope="col">Scan Machine</th>
-              <th scope="col">Scan Category</th>
-              <th scope="col">Price</th>
-              <th scope="col">Insurance Discount</th>
-              <th scope="col">Scan</th>
+              <th scope="col">Start Hour</th>
+              <th scope="col">Duration</th>
+              <th scope="col">Cost</th>
+              <th scope="col">After Insurance</th>
+              <th scope="col">Purpose</th>
             </tr>
           </thead>
           <tbody>
-            {% for scan in scans %}
+            {% if appointments %}
+            {% for appointment in appointments %}
             <tr scope="row">
-              <td>{{ scan[0] }}</td>
-              <td>{{ scan[6] }}</td>
-              <td>{{ scan[9 ] }}</td>
-              <td>{{ scan[3] }}</td>
-              <td>{{ scan[4] }}</td>
-              <td>Price $</td>
-              <td>Discount %</td>
-              <td>              
-               <a href="{{ url_for('scan_detail', scan_id=scan[0]) }}"
-                target="_blank">View</a>
-              </td>
+              <td>{{ appointment['scantypename'] }}</td>
+              <td>{{ appointment['appointmentdate'] }}</td>
+              <td>{{ appointment['starthour'] }}</td>
+              <td>{{ appointment['duration'] }}</td>
+              <td>{{ appointment['cost'] }}</td>
+              <td>{{ appointment['costafterinsurance'] }}</td>
+              <td>{{ appointment['purpose'] }}</td>
             </tr>
             {% endfor %}
+            {% endif %}
           </tbody>
         </table>
       </div>
