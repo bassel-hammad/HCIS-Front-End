@@ -411,6 +411,20 @@ def book_scan():
                 msg = "No doctor available for this time"
                 _continue_ = False
 
+            query = '''
+                SELECT *
+                FROM Appointments
+                WHERE PatientID = %s
+                AND AppointmentDate = %s
+                AND StartHour = %s;'''
+
+            # Execute the query with the variables
+            cursor.execute(query, (patient_id, appointment_date, start_hour))
+            if cursor.fetchone():
+                _continue_ = False
+                msg='You already have an appointment at that time'
+
+
             if _continue_:
                 end_hour = int(start_hour) + duration
 

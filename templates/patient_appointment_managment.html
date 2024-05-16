@@ -92,10 +92,10 @@
     <div class="container">
       <form action="{{ url_for('book_scan') }}" method="post" class="booking-form">
         <div class="form-row">
-          <h2>Hello {{patient[3]}}</h2>
+          <h2>Hello {{patient['fullname']}}</h2>
           <h2>Book a Scan </h2>
-          {% if msg1 %}
-          <div class="alert alert-warning">{{ msg1 }}</div>
+          {% if msg %}
+          <div class="alert alert-warning">{{ msg }}</div>
           {% endif %}
           <label for="scanType">Scan Type:</label>
           <select id="scanType" name="scanType" class="form-select" required onchange="updateTestTypes()">
@@ -131,7 +131,7 @@
   <!-- Appointments Section -->
   <section  class="section-padding">
     <div id="appointments" class="container">
-      <h2>{{patient[5]}}'s Scan Appointments</h2>
+      <h2>{{patient['fullname']}}'s Scan Appointments</h2>
       <div class="table-responsive">
         <table class="table table-striped custom-table">
           <thead>
