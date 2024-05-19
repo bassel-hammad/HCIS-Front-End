@@ -364,8 +364,9 @@ def patient():
     #scans_query = "SELECT * FROM Scans WHERE patient_id = %s"
     #cursor.execute(scans_query, (patient_id,))
     #scans = cursor.fetchall()
-
+    return redirect(url_for('book_scan'))
     return render_template('view_patient_info.html', patient=patient)
+
 
 
 
