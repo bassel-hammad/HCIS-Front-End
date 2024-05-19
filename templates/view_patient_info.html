@@ -4,87 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Patient Information</title>
-    <style>
-        body {
-            font-family: "Arial", sans-serif;
-            background-color: #79b5c0;
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
-            color: #333;
-        }
-
-        h1 {
-            color: #e05599;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .info-container {
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 600px;
-            margin: 20px auto;
-        }
-
-        .patient-info {
-            margin-bottom: 15px;
-            display: flex;
-            align-items: baseline;
-        }
-
-        .label {
-            font-weight: bold;
-            color: #e05599;
-            text-transform: uppercase;
-            margin-right: 10px;
-        }
-
-        .label,
-        .data {
-            font-size: 16px; 
-            vertical-align: middle;
-        }
-        .data {
-            color: black;
-            text-transform: capitalize;
-        }
-
-        @media screen and (max-width: 600px) {
-            .info-container {
-                padding: 20px;
-            }
-        }
-
-        header {
-            background-color: #ffffff;
-            border-bottom: 1px solid #ddd;
-            padding: 20px 0;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-button {
-            background-color: #e05599;
-            border: none;
-            border-radius: 5px;
-            color: #ffffff;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px;
-            padding: 10px 20px;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        .header-button:hover {
-            background-color: #c14481;
-        }
-    </style>
+    <link rel="stylesheet" href="../css/login.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../css/index.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
 </head>
 <body>
     <header>
