@@ -135,10 +135,7 @@ banner
 .affix {
     background-color: #ffffff !important;
 }
-.affix .navbar-nav > li > a:hover, .affix .navbar-nav > li > a:focus
-{
-    background-color: rgba(12, 184, 182) !important;
-}
+
 #indexbanner{
 	background: url('../image/bg-banner.jpg') no-repeat fixed;
 	background-size: cover;
@@ -437,7 +434,7 @@ contact us
 footer
 ***************************************/
 #footer{
-	background-color: #8B93FF;
+	background-color:  #c7799f;
 }
 .ftr-tle {
     height: 50px;
