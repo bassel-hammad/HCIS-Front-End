@@ -66,6 +66,15 @@
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
     <script src="{{ url_for('static', filename='contactform/contactform.js') }}"></script>
+
+    <!-- jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    
+    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.easing.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+    <script src="{{ url_for('static', filename='contactform/contactform.js') }}"></script>
   </head>
 
   <body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60" style="background-color: #79b5c0;">
@@ -259,6 +268,10 @@
                   </fieldset>
                 </form>
     </section>
+    <!-- Generate PDF button -->
+    <div class="container">
+      <button id="generatePDF" class="btn btn-primary">Generate PDF</button>
+    </div>
             <!-- doctors table -->
             <section id="Doctors" class="Doctors">
               <div class="container">
@@ -394,5 +407,11 @@
       <script src="js/jquery.min.js"></script>
       <script src="js/jquery.easing.min.js"></script>
       <script src="js/bootstrap.min.js"></script>
+
+      <script>
+        document.getElementById('generatePDF').addEventListener('click', function() {
+            window.location.href = '/generate_pdf';
+        });
+    </script>
   </body>
 </html>

@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, redirect, session,flash,get_flashed_messages,url_for
+from flask import Flask, render_template, request, redirect, session, send_file ,url_for
 import psycopg2
 import os
 import psycopg2.extras
-from datetime import datetime,timedelta
+from datetime import datetime , timedelta
 import secrets
 import string
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import tempfile
 
 
 
@@ -26,7 +29,7 @@ db_params = {
     "host": "localhost",
     "database": "department", # The name of the database you want to use, it  should be already created in PostgreSQL
     "user": "postgres",#"your-username",
-    "password": "bassel2003",#"your-password",
+    "password": "0000",#"your-password",
     "port":5432
 }
 try:
@@ -51,6 +54,108 @@ def find_all(table_name):
     return data
 
 import psycopg2
+
+def generate_pdf():
+    """Generate a PDF report of statistics."""
+    try:
+        # Fetch the number of doctors
+        cursor.execute("SELECT COUNT(*) FROM Radiologist")
+        num_doctors = cursor.fetchone()[0]
+
+        # Fetch the number of patients
+        cursor.execute("SELECT COUNT(*) FROM Patients")
+        num_patients = cursor.fetchone()[0]
+
+        # Fetch the number of scan types
+        cursor.execute("SELECT COUNT(*) FROM ScanTypes")
+        num_scan_types = cursor.fetchone()[0]
+
+        # Fetch the total amount of money entered
+        cursor.execute("SELECT SUM(Cost) FROM Appointments")
+        total_money = cursor.fetchone()[0] or 0
+
+        # Fetch the amount of money deducted due to insurance
+        cursor.execute("SELECT SUM(Cost - CostAfterInsurance) FROM Appointments WHERE CostAfterInsurance IS NOT NULL")
+        total_deducted_money = cursor.fetchone()[0] or 0
+
+        # Calculate the net money (total money - deducted money)
+        net_money = total_money - total_deducted_money
+
+        # Fetch the number of appointments
+        cursor.execute("SELECT COUNT(*) FROM Appointments")
+        num_appointments = cursor.fetchone()[0]
+
+        # Temporary file to save the PDF
+        pdf_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
+        c = canvas.Canvas(pdf_file.name, pagesize=letter)
+        width, height = letter
+
+        # Write the statistics to the PDF
+        y_position = height - 50
+        line_height = 20
+
+        c.drawString(100, y_position, f"Number of Doctors: {num_doctors}")
+        y_position -= line_height
+        c.drawString(100, y_position, f"Number of Patients: {num_patients}")
+        y_position -= line_height
+        c.drawString(100, y_position, f"Number of Scan Types: {num_scan_types}")
+        y_position -= line_height
+        c.drawString(100, y_position, f"Total Amount of Money Entered: {total_money}")
+        y_position -= line_height
+        c.drawString(100, y_position, f"Total Amount of Money Deducted Due to Insurance: {total_deducted_money}")
+        y_position -= line_height
+        c.drawString(100, y_position, f"Net Money: {net_money}")
+        y_position -= line_height
+        c.drawString(100, y_position, f"Number of Appointments: {num_appointments}")
+
+        # Save the PDF
+        c.save()
+
+        return pdf_file.name
+
+    except Exception as e:
+        print(f"Error generating PDF: {str(e)}")
+        return None
+
+
+    
+@app.route('/generate_pdf')
+def generate_pdf_route():
+    pdf_path = generate_pdf()
+    if pdf_path:
+        return send_file(pdf_path, as_attachment=True, download_name='statistics_report.pdf')
+    else:
+        return "Error generating PDF", 500
+
+
+def print_statistics():
+    try:
+        # Number of doctors
+        cursor.execute("SELECT COUNT(*) FROM Radiologist")
+        num_doctors = cursor.fetchone()[0]
+
+        # Number of patients
+        cursor.execute("SELECT COUNT(*) FROM Patients")
+        num_patients = cursor.fetchone()[0]
+
+        # Number of appointments
+        cursor.execute("SELECT COUNT(*) FROM Appointments")
+        num_appointments = cursor.fetchone()[0]
+
+        # Number of scans
+        cursor.execute("SELECT COUNT(*) FROM ImagingReport")
+        num_scans = cursor.fetchone()[0]
+
+        # Print statistics to terminal
+        print(f"Statistics:")
+        print(f"Number of Doctors: {num_doctors}")
+        print(f"Number of Patients: {num_patients}")
+        print(f"Number of Appointments: {num_appointments}")
+        print(f"Number of Scans: {num_scans}")
+
+    except Exception as e:
+        print(f"Error fetching statistics: {e}")
+
 
 def calculate_payments(patient_id, scan_cost):
         # Check if the patient ID exists in the InsurancePolicy table
@@ -184,15 +289,16 @@ def login():
                       
     print(Message)
     return render_template('login.html',message=Message)
-@app.route('/admin',methods=['GET', 'POST'])
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
     """Admin page"""
-    if(session['userType']=="Admins_accounts"):
-        Radiologists=find_all("Radiologist")
-
-        return render_template("admin2.html",doctors=Radiologists)
+    if session['userType'] == "Admins_accounts":
+        # Removed the PDF generation code from here
+        Radiologists = find_all("Radiologist")
+        return render_template("admin2.html", doctors=Radiologists)
     else:
-        return redirect("/")  #if not logged in as an Admin go to home page
+        return redirect("/")  # if not logged in as an Admin go to home page
+
     
 
 
