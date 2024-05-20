@@ -24,12 +24,17 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" media="all" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
+    <style>
+      body {
+        background-color: #79b5c0;
+      }
+    </style>
 </head>
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60" >
 
   <!-- Main Content -->
   <div class="container">
-    <h1>Doctor's Appointments</h1>
+    <h1 style="color: #e05599;">Doctor's Appointments</h1>
     <form method="POST" action="/my_calendar">
       <div class="date-picker">
         <label for="appointment-date" style="background-color:white;">   .    </label>
