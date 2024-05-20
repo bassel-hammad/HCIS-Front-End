@@ -85,6 +85,9 @@ def generate_pdf():
         cursor.execute("SELECT COUNT(*) FROM Appointments")
         num_appointments = cursor.fetchone()[0]
 
+        # Get current date and time
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
         # Temporary file to save the PDF
         pdf_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pdf')
         c = canvas.Canvas(pdf_file.name, pagesize=letter)
@@ -94,6 +97,8 @@ def generate_pdf():
         y_position = height - 50
         line_height = 20
 
+        c.drawString(100, y_position, f"Statistical report Issued Date and Time: {current_time}")
+        y_position -= line_height
         c.drawString(100, y_position, f"Number of Doctors: {num_doctors}")
         y_position -= line_height
         c.drawString(100, y_position, f"Number of Patients: {num_patients}")
