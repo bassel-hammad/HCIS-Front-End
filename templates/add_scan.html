@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Add Scan</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/patient.css') }}">
+  <style>
+    .form-container {
+      background-color: #f9f9f9;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .form-row {
+      margin-bottom: 20px;
+    }
+    .form-label {
+      font-weight: bold;
+    }
+    .form-control {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .btn {
+      padding: 10px 20px;
+      border-radius: 4px;
+    }
+    .img-preview {
+      margin-top: 20px;
+      max-width: 100%;
+      max-height: 400px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Add Scan</h2>
+    
+    <!-- Add Scan Form -->
+    <div class="form-container">
+      <!-- Display message -->
+      <div class="alert alert-success" role="alert" style="display: {{ 'block' if msg else 'none' }}">
+        {{ msg }}
+      </div>
+
+      <form action="{{ url_for('add_scan') }}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" id="patientId" name="patientId" value="{{ patient.patientid }}">
+        <div class="form-row">
+          <label for="patientName" class="form-label">Patient Name:</label>
+          <p id="patientName">{{ patient.fullname }}</p>
+        </div>
+        <div class="form-row">
+          <label for="scanType" class="form-label">Study Type:</label>
+          <input type="text" id="studyType" name="studyType" class="form-control" required>
+        </div>
+        <div class="form-row">
+          <label for="studyDate" class="form-label">Study Date:</label>
+          <input type="date" id="studyDate" name="studyDate" class="form-control" required>
+        </div>
+        <div class="form-row">
+          <label for="scanImage" class="form-label">Upload Image:</label>
+          <input type="file" id="scanImage" name="scanImage" class="form-control" accept="image/*" required>
+        </div>
+        <div class="form-row">
+          <label for="reportText" class="form-label">Report Text:</label>
+          <textarea id="reportText" name="reportText" class="form-control" rows="5" required></textarea>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn btn-primary">Add Scan</button>
+        </div>
+      </form>
+
+      <!-- Image Preview -->
+      <div class="img-preview">
+        <img id="imgPreview" src="#" alt="Image Preview" style="display: none;">
+      </div>
+    </div>
+
+    <!-- Button to return to doctor's patients -->
+    <div class="form-row">
+      <a href="{{ url_for('my_patients') }}" class="btn btn-secondary">Back to My Patients</a>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  <script>
+    // JavaScript to show image preview
+    document.getElementById('scanImage').addEventListener('change', function(event) {
+      const [file] = this.files;
+      if (file) {
+        document.getElementById('imgPreview').src = URL.createObjectURL(file);
+        document.getElementById('imgPreview').style.display = 'block';
+      }
+    });
+  </script>
+</body>
+
+</html>

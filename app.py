@@ -16,6 +16,10 @@ app.config['SECRET_KEY'] = '1234'
 DOC_IMG_FOLDER = 'static/doctors_images/'
 app.config['UPLOAD_DOC_IMG']=DOC_IMG_FOLDER
 
+#folder for Scans images
+SCAN_IMG_FOLDER = 'static/scans/'
+app.config['UPLOAD_SCAN_IMG']=SCAN_IMG_FOLDER
+
 # Defining database connection parameters  print(Radiologists[0])
 # Please replace the values with your own credentials.
 db_params = {
@@ -360,13 +364,19 @@ def patient():
     #scans_query = "SELECT * FROM Scans WHERE patient_id = %s"
     #cursor.execute(scans_query, (patient_id,))
     #scans = cursor.fetchall()
-
+    return redirect(url_for('book_scan'))
     return render_template('view_patient_info.html', patient=patient)
+
 
 
 
 @app.route('/book_scan', methods=['POST','GET'])
 def book_scan():
+    query_to_get_patient = "SELECT * FROM Patients WHERE UserName = %s"
+    cursor.execute(query_to_get_patient, (session['username'],))
+    patient = dict(cursor.fetchone())
+    if patient:
+            patient_id = patient['patientid']
     msg=""
     _continue_=True
     if request.method == 'POST':
@@ -378,11 +388,8 @@ def book_scan():
         end_hour = int(start_hour) + 1
         duration = 1
         
-        query_to_get_patient_id = "SELECT PatientID FROM Patients WHERE UserName = %s"
-        cursor.execute(query_to_get_patient_id, (session['username'],))
-        patient_id = cursor.fetchone()
-        if patient_id:
-            patient_id = patient_id[0]
+        if patient:
+            patient_id = patient['patientid']
         else:
             _continue_=False
 
@@ -405,6 +412,20 @@ def book_scan():
                 msg = "No doctor available for this time"
                 _continue_ = False
 
+            query = '''
+                SELECT *
+                FROM Appointments
+                WHERE PatientID = %s
+                AND AppointmentDate = %s
+                AND StartHour = %s;'''
+
+            # Execute the query with the variables
+            cursor.execute(query, (patient_id, appointment_date, start_hour))
+            if cursor.fetchone():
+                _continue_ = False
+                msg='You already have an appointment at that time'
+
+
             if _continue_:
                 end_hour = int(start_hour) + duration
 
@@ -419,7 +440,11 @@ def book_scan():
                 connection.commit()
                 msg = "Appointment created successfully"
 
-    query = "SELECT * FROM Appointments WHERE PatientID = %s;"
+    query = '''
+        SELECT *
+        FROM Appointments a
+        JOIN ScanTypes s ON a.ScanTypeID = s.ScanTypeID
+        WHERE a.PatientID = %s;'''
 
     # Execute the SQL query with the patient ID as parameter
     cursor.execute(query, (patient_id,))
@@ -428,15 +453,15 @@ def book_scan():
     appointments = cursor.fetchall()
     patient_appointments = [dict(row) for row in appointments]
     # Render a success or confirmation page
-    return render_template('patient_appointments.html', patient=patient,msg=msg,appointments=patient_appointments)
+    print(patient_appointments)
+    return render_template('patient_appointment_managment.html', patient=patient,msg=msg,appointments=patient_appointments)
 
 
 @app.route('/doctor')
 def doctor():
-    patient_query = "SELECT * FROM Radiologist WHERE UserName = %s"
-    cursor.execute(patient_query, (session['username'],))
+    doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+    cursor.execute(doctor_query, (session['username'],))
     radiologist =dict(cursor.fetchone())
-    print(radiologist)
     # Render the HTML template for the doctor's dashboard
     return render_template('Radiologydoctor.html',doctor=radiologist)
 
@@ -449,7 +474,7 @@ def my_calendar():
         if  date:
             pass
         else:
-            return render_template('calendar.html')
+            return render_template('doctor_search_for_appointments.html')
 
         doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
         cursor.execute(doctor_query, (session['username'],))
@@ -466,12 +491,116 @@ def my_calendar():
         data = [dict(row) for row in appointments]
         print(len(data))
         print(data)
-        return render_template('appointments.html', appointments=data, date=date)
-    return render_template('calendar.html')
+        return render_template('doctor_appointments_after_search.html', appointments=data, date=date)
+    return render_template('doctor_search_for_appointments.html')
 
 @app.route('/my_patients', methods=['GET', 'POST'])
 def my_patients():
-    return render_template("my_patinents.html",doctor={1,2,3,4,5})
+    doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+    cursor.execute(doctor_query, (session['username'],))
+    radiologist =dict(cursor.fetchone())
+    radiologist_id =radiologist['radiologistid']
+    # Fetch doctor information from the database
+    cursor.execute('SELECT * FROM Radiologist WHERE RadiologistID = %s', (radiologist_id,))
+    
+
+    # Fetch patients of the doctor
+    cursor.execute('''
+        SELECT p.PatientID AS id, p.FullName AS fullname 
+        FROM Patients p
+        JOIN Appointments a ON p.PatientID = a.PatientID
+        WHERE a.PhysicianID = %s
+    ''', (radiologist_id,))
+    patients = cursor.fetchall()
+    doc_patients = [dict(row) for row in patients]
+    # Render the template with doctor and patients data
+    return render_template('my_patinents.html', patients=doc_patients,doctor=radiologist)
+
+
+
+from flask import render_template, request
+
+@app.route('/show_scans', methods=['POST','GET'])
+def show_scans():
+    if request.method=='GET':
+        # Get the value of the 'doctor_id' parameter from the URL
+        patient_id = request.args.get('patient_id')
+    msg = ''
+    scan_info = None
+    
+    if request.method == 'POST':
+        patient_id = request.form['patientId']
+        scan_type = request.form['scanType']
+        
+        # Query the database to fetch scan information based on the selected scan type
+        cursor.execute('''
+            SELECT * FROM ImagingReport 
+            WHERE PatientID = %s AND StudyType = %s
+        ''', (patient_id, scan_type))
+        
+        scan_info = dict(cursor.fetchone())
+        print(scan_info)
+        
+        if not scan_info:
+            msg = 'No scan found for the selected scan type.'
+    
+    cursor.execute('SELECT * FROM Patients WHERE PatientID = %s', (patient_id,))
+    patient = dict(cursor.fetchone())
+    
+    # Fetch all scan types for the dropdown menu
+    cursor.execute('SELECT *  FROM ImagingReport WHERE PatientID = %s', (patient_id,))
+    scan_types = [row['studytype'] for row in cursor.fetchall()]
+    
+    return render_template('show_scans.html', patient=patient, msg=msg, scan_info=scan_info, scan_types=scan_types ,usertype=session['userType'])
+
+
+
+@app.route('/add_scan', methods=['GET', 'POST'])
+def add_scan():
+    msg = ''
+    if request.method=='GET':
+        # Get the value of the 'doctor_id' parameter from the URL
+        patient_id = request.args.get('patient_id')
+    if request.method == 'POST':
+        # Fetching radiologist information
+        doctor_query = "SELECT * FROM Radiologist WHERE UserName = %s"
+        cursor.execute(doctor_query, (session['username'],))
+        radiologist = dict(cursor.fetchone())
+        radiologist_id = radiologist['radiologistid']
+        
+        # Extracting form data
+        study_type = request.form['studyType']
+        study_date = request.form['studyDate']
+        report_text = request.form['reportText']
+        patient_id= request.form['patientId']
+        # Handling scan image upload
+        if 'scanImage' in request.files:
+            
+            scan_image = request.files['scanImage']
+            if scan_image.filename:
+                # Saving the scan image to the specified folder
+                file_data = scan_image.filename.split(".")
+                filename = str(patient_id) + "_" + file_data[0] + "." + file_data[1]
+                file_path = os.path.join(app.config['UPLOAD_SCAN_IMG'], filename)
+                scan_image.save(file_path)
+            else:
+                file_path = None
+        else:
+            file_path = None
+
+        # Inserting scan record into the database
+        cursor.execute('''
+            INSERT INTO ImagingReport (PatientID, StudyType, StudyDate, OrderingPhysician, Image, ReportText)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        ''', (patient_id, study_type, study_date, radiologist_id, file_path, report_text))
+        connection.commit()
+        msg = 'Scan added successfully'
+
+    cursor.execute('SELECT * FROM Patients WHERE PatientID = %s', (patient_id,))
+    patient = dict(cursor.fetchone())
+    return render_template('add_scan.html', patient=patient, msg=msg)
+
+
 
 if __name__ == "__main__":
     app.run()

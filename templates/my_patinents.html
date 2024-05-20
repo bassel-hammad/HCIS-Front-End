@@ -20,7 +20,7 @@
       <h3>Doctor Information</h3>
       <div class="form-row">
         <label for="doctorId">ID:</label>
-        <p id="doctorId">{{ doctor.id }}</p>
+        <p id="doctorId">{{ doctor.radiologistid }}</p>
       </div>
       <div class="form-row">
         <label for="doctorFullName">Full Name:</label>
@@ -58,6 +58,7 @@
             </td>
             <td>
               <a href="{{ url_for('add_scan', patient_id=patient.id) }}" class="btn btn-primary">Add Scan</a>
+              
             </td>
           </tr>
           {% endfor %}
