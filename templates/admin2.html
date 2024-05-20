@@ -339,14 +339,10 @@
                           >
                         </td>
                         <td>
-                          <form
-                            method="post"
-                            action="{{ url_for('delete_doctor_route', doctor_id=d.radiologistid) }}"
+                          <a
+                            href="{{ url_for('delete_doctor_route', doctor_id=d.radiologistid) }}"
+                            >Remove</a
                           >
-                            <button type="submit" class="btn btn-remove">
-                              Remove
-                            </button>
-                          </form>
                         </td>
                       </tr>
                       {% endfor %}

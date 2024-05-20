@@ -396,7 +396,7 @@ def edit_doctor():
 
 
 #delete_doctor_route
-@app.route("/delete_doctor_route")
+@app.route("/delete_doctor_route", methods=["POST","GET"])
 def delete_doctor_route():
     # Get the value of the 'doctor_id' parameter from the URL
     doctor_id = request.args.get('doctor_id')
