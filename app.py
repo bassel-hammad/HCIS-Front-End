@@ -28,7 +28,7 @@ db_params = {
     "host": "localhost",
     "database": "department", # The name of the database you want to use, it  should be already created in PostgreSQL
     "user": "postgres",#"your-username",
-    "password": "root",#"your-password",
+    "password": "2929",#"your-password",
     "port":5432
 }
 try:
@@ -514,7 +514,8 @@ def book_scan():
         if _continue_ and cost_row:
             # Extract the cost from the result
             cost = int(cost_row[0])
-            cost_after_insurance = calculate_payments(patient_id, cost)
+            #cost_after_insurance = calculate_payments(patient_id, cost)
+            cost_after_insurance = int(cost_row[0])
 
             doctor_id = get_available_doctor(start_hour, appointment_date)
             if doctor_id == None:
@@ -547,7 +548,10 @@ def book_scan():
 
                 # Commit the transaction
                 connection.commit()
-                msg = "Appointment created successfully"
+                cursor.execute('SELECT * FROM  Radiologist WHERE RadiologistID=%s' , (doctor_id, ))
+                data = cursor.fetchone()
+                doctor = dict(data)
+                msg = "Appointment created successfully"+"with DR."+doctor['fullname']
 
     query = '''
         SELECT *
