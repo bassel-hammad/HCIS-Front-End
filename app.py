@@ -29,7 +29,7 @@ db_params = {
     "host": "localhost",
     "database": "department", # The name of the database you want to use, it  should be already created in PostgreSQL
     "user": "postgres",#"your-username",
-    "password": "0000",#"your-password",
+    "password": "2929",#"your-password",
     "port":5432
 }
 try:
@@ -470,7 +470,7 @@ def patient():
     #scans_query = "SELECT * FROM Scans WHERE patient_id = %s"
     #cursor.execute(scans_query, (patient_id,))
     #scans = cursor.fetchall()
-
+    return redirect(url_for('book_scan'))
     return render_template('view_patient_info.html', patient=patient)
 
 

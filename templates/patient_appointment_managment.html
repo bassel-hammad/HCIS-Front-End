@@ -76,6 +76,8 @@
             <div class="banner-text text-center">
               <h1 class="white">HealthCare, Never Been Easier!</h1>
               <a href="#radiology" class="btn btn-appoint">Make a Scan Appointment.</a>
+              <a href="{{ url_for('show_scans', patient_id=patient.patientid) }}" class="btn btn-appoint">My Scans</a>
+              <a href="{{ url_for('add_insurance') }}" class="btn btn-appoint">Add Insurance</a>
             </div>
             <div class="overlay-detail text-center">
               <a href="#service"><i class="fa fa-angle-down"></i></a>
