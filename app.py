@@ -3,6 +3,7 @@ import psycopg2
 import os
 import psycopg2.extras
 from datetime import datetime , timedelta
+
 import secrets
 import string
 from reportlab.lib.pagesizes import letter
@@ -426,8 +427,8 @@ def add_insurance():
         
         # Convert date strings to datetime objects
         try:
-            policy_start_date = datetime.datetime.strptime(policy_start_date_str, "%Y-%m-%d").date()
-            policy_end_date = datetime.datetime.strptime(policy_end_date_str, "%Y-%m-%d").date()
+            policy_start_date = datetime.strptime(policy_start_date_str, "%Y-%m-%d").date()
+            policy_end_date = datetime.strptime(policy_end_date_str, "%Y-%m-%d").date()
         except ValueError:
             msg += "Invalid date format. Please use YYYY-MM-DD format for dates.\n"
         
