@@ -9,47 +9,40 @@
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/patient.css') }}">
-  <link rel="stylesheet" href="../css/login.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="../css/index.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css" media="all" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" type="text/css" media="all" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css" media="all" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}" type="text/css" media="all" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" media="all" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
+  <style>
+    body {
+      background-color: #79b5c0;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="container">
-    <h2>Doctor Dashboard</h2>
+  <div style="background-color: white;" class="container">
+    <h2 style="color: #e05599;">Doctor Dashboard</h2>
     
     <!-- Doctor Information -->
     <div class="doctor-info">
-      <h3>Doctor Information</h3>
+      <h3 style="color: #e05599;">Doctor Information</h3>
       <div class="form-row">
         <label for="doctorId">ID:</label>
-        <p id="doctorId">{{ doctor.radiologistid }}</p>
+        <p id="doctorId" style="color: #e05599;">{{ doctor.radiologistid }}</p>
       </div>
       <div class="form-row">
         <label for="doctorFullName">Full Name:</label>
-        <p id="doctorFullName">{{ doctor.fullname }}</p>
+        <p id="doctorFullName" style="color: #e05599;">{{ doctor.fullname }}</p>
       </div>
       <div class="form-row">
         <label for="doctorEmail">Email:</label>
-        <p id="doctorEmail">{{ doctor.email }}</p>
+        <p id="doctorEmail" style="color: #e05599;">{{ doctor.email }}</p>
       </div>
       <div class="form-row">
         <label for="doctorUsername">Username:</label>
-        <p id="doctorUsername">{{ doctor.username }}</p>
+        <p id="doctorUsername" style="color: #e05599;">{{ doctor.username }}</p>
       </div>
     </div>
 
     <!-- Patients Table -->
-    <h3>Patients</h3>
+    <h3 style="color: #e05599;">Patients</h3>
     <div class="table-responsive">
       <table class="table table-striped custom-table">
         <thead>
@@ -60,7 +53,7 @@
             <th scope="col">Add Scan</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody >
           {% for patient in patients %}
           <tr>
             <td>{{ patient.id }}</td>
