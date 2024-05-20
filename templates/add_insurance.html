@@ -5,29 +5,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Add Insurance Details</title>
-  <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css'">
-  <link rel="stylesheet" type="text/css" href="static/css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="static/css/index.css">
-  <link rel="stylesheet" type="text/css" href="static/css/patient.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/patient.css') }}">
+  <link rel="stylesheet" href="../css/login.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../css/index.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="../css/font-awesome.min.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans|Raleway|Candal" type="text/css" media="all" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-...." crossorigin="anonymous" type="text/css" media="all" />
 </head>
 
-<body style="background-color: #FFF7FC;">
-  <div  class="container">
-    <h2 style="color: #FF71CD">Add Insurance Details</h2>
+<body>
+  <div class="container">
+    <h2>Add Insurance Details</h2>
     <!-- Display message if it exists -->
-    <!-- {% if message %} -->
+    {% if message %}
     <div class="alert alert-info" role="alert">
-      <!-- {{ message }} -->
+      {{ message }}
     </div>
-    <!-- {% endif %} -->
-    <form action="add_insurance.html" method="post" class="insurance-form">
+    {% endif %}
+    <form action="{{ url_for('add_insurance') }}" method="post" class="insurance-form">
       <div class="form-row">
         <label for="insuranceCompany">Insurance Company:</label>
         <select id="insuranceCompany" name="insuranceCompany" class="form-select" required>
           <!-- Populate this dropdown with insurance company options -->
-          <!-- {% for company in insurance_companies %} -->
-            <option value="{{ company['companyid'] }}"></option>
-          <!-- {% endfor %} -->
+          {% for company in insurance_companies %}
+            <option value="{{ company['companyid'] }}">{{ company['companyname'] }}</option>
+          {% endfor %}
         </select>
       </div>
 
@@ -67,13 +79,13 @@
       </div>
 
       <div class="form-row button-submit">
-        <button style="background-color: #8B93FF" class="btn btn-login">Add Insurance</button>
+        <button class="btn btn-login">Add Insurance</button>
       </div>
     </form>
   </div>
 
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 </body>
 
 </html>
